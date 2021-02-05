@@ -26,8 +26,11 @@ dependencies:
     sdk: flutter
 
   carousel_pro: ^1.0.0
-
-
+  firebase_auth: ^0.20.0+1
+  cloud_firestore: ^0.16.0
+  google_sign_in: ^4.5.9
+  shared_preferences: ^0.5.12+4
+  fluttertoast: ^7.1.6
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -55,6 +58,15 @@ flutter:
     - images/bannerImg1.jpg
     - images/bannerImg2.jpg
     - images/bannerImg3.jpg
+    - images/category/bmx.png
+    - images/category/cargo.png
+    - images/category/folding.png
+    - images/category/kids.png
+    - images/category/mountain.png
+    - images/category/roadbike.png
+    - images/category/tandem.png
+    - images/products/cantina.png
+    - images/products/SD_AM.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "513655837536",
+    "project_id": "cycle-up",
+    "storage_bucket": "cycle-up.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513655837536:android:878156a14a7c66f72b0405",
+        "android_client_info": {
+          "package_name": "com.example.cycle_up"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "513655837536-nptrlnk5ag4d37qunnumajmqfqv83k8e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cycle_up",
+            "certificate_hash": "34e36d3b6bbe6af597fcc521f6f44cf7465eee73"
+          }
+        },
+        {
+          "client_id": "513655837536-css9isl928qu0l7hkblbacg7lfbf2rn6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFAROe13HaIAt6s0VVOjGzND8MX3VSqJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "513655837536-css9isl928qu0l7hkblbacg7lfbf2rn6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
