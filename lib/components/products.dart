@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cycle_up/pages/product_details.dart';
+import 'package:cycle_up/pages/home.dart';
 
 class Products extends StatefulWidget {
+
+
   @override
   _ProductsState createState() => _ProductsState();
 }
@@ -10,7 +13,7 @@ class _ProductsState extends State<Products> {
   var product_list = [
     {
       "name": "SD AM",
-      "picture":"images/products/SD_AM.png",
+      "picture": "images/products/SD_AM.png",
       "old_price": 150,
       "price": 100,
       "frameset": "Full Cr-Mo Frame ",
@@ -53,12 +56,15 @@ class _ProductsState extends State<Products> {
 
   ];
 
+  get index => null;
+
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
         itemCount: product_list.length,
         gridDelegate:
-            new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Single_prod(
             prod_name: product_list[index]['name'],
@@ -69,6 +75,7 @@ class _ProductsState extends State<Products> {
           );
         });
   }
+
 }
 
 class Single_prod extends StatelessWidget {
@@ -102,7 +109,8 @@ class Single_prod extends StatelessWidget {
                     prod_detail_old_price: prod_old_price,
                     prod_detail_picture: prod_picture,
                     prod_detail_frameset: prod_frameset,
-                  ))),
+                  ),
+              )),
               child: GridTile(
                   footer: Container(
                     color: Colors.white70,
@@ -116,9 +124,45 @@ class Single_prod extends StatelessWidget {
                   child: Image.asset(
                     prod_picture,
                     fit: BoxFit.cover,
-                  )),
+                  ),
+              ),
             ),
+
           )),
     );
   }
+
+ }
+
+class ProdItem{
+
+  final String name;
+  final String category;
+  ProdItem({
+    this.name,
+    this.category,
+  });
 }
+List<ProdItem> loadProdItem(){
+  var fi = <ProdItem>[
+    ProdItem(
+        name: "SD AM",
+        category: "BMX",
+    ),
+    ProdItem(
+      name: "Cantina",
+      category: "Road bike",
+    ),
+    ProdItem(
+      name: "Leucadia",
+      category: "BMX",
+    ),
+    ProdItem(
+      name: "Shredder_18",
+      category: "road bike",
+    ),
+  ];
+  return fi;
+}
+
+

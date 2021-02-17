@@ -14,7 +14,8 @@ class ProductDetails extends StatefulWidget {
   final prod_detail_frameset;
 
 
-  ProductDetails({this.prod_detail_name,
+  ProductDetails({
+    this.prod_detail_name,
     this.prod_detail_new_price,
     this.prod_detail_old_price,
     this.prod_detail_picture,
@@ -30,6 +31,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   String dropdownValueTwo = '';
   String dropdownValue = '';
+  String textValue='';
   bool disabledropdown = true;
   List<DropdownMenuItem<String>> menuitems = List();
 
@@ -39,6 +41,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     "3": "3",
     "4": "4",
     "5": "5",
+    "6": "6",
+    "7": "7",
   };
   final Hour = {
     "1": "1",
@@ -46,6 +50,12 @@ class _ProductDetailsState extends State<ProductDetails> {
     "3": "3",
     "4": "4",
     "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "10": "10",
+    "11": "11",
   };
 
   void populateday(){
@@ -191,66 +201,80 @@ class _ProductDetailsState extends State<ProductDetails> {
                       return StatefulBuilder(
                       builder: (context, setState) {
                         return AlertDialog(
-                          title: new Text("Rent Type"),
-                          content: Padding(padding: const EdgeInsets.all(16.0),
-                            //child: TextField(
-                            // controller: myController,
-                            // keyboardType: TextInputType.number,
-                            // inputFormatters: <TextInputFormatter>[
-                            //   FilteringTextInputFormatter.digitsOnly
-                            // ],
-                            child: Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.all(5.0),
+                          title: Column(
+                            children: [
+                              new Text("Rent Type"),
+                              Divider(indent: 5.0,color: Colors.white),
+                            ],
+                          ),
 
-                                  child: DropdownButton<String>(
-                                    items: [
-                                      DropdownMenuItem<String>(
-                                        value: "Day",
-                                        child: Center(
-                                          child: Text("Day"),
-                                        ),
+                          content: Column(
+                            children: [
+                              new Text("1 hour = 50Php", style: TextStyle(height: 0, fontSize: 15),),
+                              Divider(indent: 1.0,color: Colors.white),
+                              new Text("1 Day = 500Php", style: TextStyle(height: 0, fontSize: 15),),
+                              Divider(indent: 6.0,color: Colors.white),
+                              Text("Choose type of rental and number of Day/Hr"),
+
+                              Padding(padding: const EdgeInsets.all(16.0),
+
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(5.0),
+
+                                      child: DropdownButton<String>(
+                                        items: [
+                                          DropdownMenuItem<String>(
+                                            value: "Day",
+                                            child: Center(
+                                              child: Text("Day"),
+                                            ),
+                                          ),
+                                          DropdownMenuItem<String>(
+                                            value: "Hour",
+                                            child: Center(
+                                              child: Text("Hour"),
+                                            ),
+                                          ),
+                                        ],
+                                        onChanged: (_value) => {valuechanged(_value),
+                                        setState(() {
+                                        dropdownValue = _value;
+                                        textValue = _value;
+                                        }),
+                                        },
+                                        hint: Text("Type: $textValue",
+                                            style: TextStyle(color: Colors.grey)),
                                       ),
-                                      DropdownMenuItem<String>(
-                                        value: "Hour",
-                                        child: Center(
-                                          child: Text("Hour"),
-                                        ),
-                                      ),
-                                    ],
-                                    onChanged: (_value) => {valuechanged(_value),
-                                    setState(() {
-                                    dropdownValue = _value;
-                                    }),
-                                    },
-                                    hint: Text("Day/Hr",
-                                        style: TextStyle(color: Colors.grey)),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: DropdownButton<String>(
-                                    items: menuitems,
-                                    onChanged: disabledropdown ? null : (
-                                        _value) => {secondvaluechanged(_value),
-                                    setState(() {
-                                    dropdownValue = _value;
-                                    }),
-                                    },
-                                    hint: Text("Select day/hr",
-                                        style: TextStyle(color: Colors.grey)),
-                                    disabledHint: Text(
-                                      "First select number",
                                     ),
-                                  ),
 
+                                    Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: DropdownButton<String>(
+
+                                        items: menuitems,
+                                        onChanged: disabledropdown ? null : (
+                                            _value) => {secondvaluechanged(_value),
+                                        setState(() {
+                                        dropdownValue = _value;
+                                        }),
+                                        },
+                                        hint: Text("Select a number",
+                                            style: TextStyle(color: Colors.grey)),
+                                        disabledHint: Text(
+                                          "First select Day/Hr",
+                                        ),
+                                      ),
+
+                                    ),
+
+                                    Text("$dropdownValue"),
+                                  ],
                                 ),
 
-                                Text("$dropdownValue"),
-                              ],
-                            ),
-
+                              ),
+                            ],
                           ),
                           //),
 
@@ -315,13 +339,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                             ),
                           ),
                         ],
+
                         onChanged: (_value) => {
                           print(_value.toString()),
                           setState((){
                             dropdownValueTwo = _value;
                           }),
                         },
-                        hint: Text("Qty", style: TextStyle(color: Colors.grey)),
+
+                        hint: Text("Qty: $dropdownValueTwo"),
+                        disabledHint: Text("Qtysdgfsdgf"),
                       ),
                     ),
                     // Text("$dropdownValue"),

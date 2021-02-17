@@ -15,38 +15,8 @@ import 'package:cycle_up/pages/cart.dart';
 //import 'package:cycle_up/widget/logged_in_widget.dart';
 import 'package:provider/provider.dart';
 
-// class HomePage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) => Scaffold(
-//     body: ChangeNotifierProvider(
-//       create: (context) => GoogleSignInProvider(),
-//       child: StreamBuilder(
-//         stream: FirebaseAuth.instance.authStateChanges(),
-//         builder: (context, snapshot) {
-//           final provider = Provider.of<GoogleSignInProvider>(context);
-//
-//           if (provider.isSigningIn) {
-//             return buildLoading();
-//           } else if (snapshot.hasData) {
-//             return LoggedInWidget();
-//           } else {
-//             return SignUpWidget();
-//           }
-//         },
-//       ),
-//     ),
-//   );
-//
-//   Widget buildLoading() => Stack(
-//     fit: StackFit.expand,
-//     children: [
-//       Center(child: CircularProgressIndicator()),
-//     ],
-//   );
-// }
-
-
 class HomePage extends StatefulWidget {
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -85,7 +55,9 @@ class _HomePageState extends State<HomePage> {
                 Icons.search,
                 color: Colors.white,
               ),
-              onPressed: () {}),
+              onPressed: () {
+                showSearch(context: context, delegate: ProductsSearch());
+              }),
           new IconButton(
               icon: Icon(
                 Icons.shopping_cart,
@@ -216,9 +188,46 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
 void logout() async {
   await googleSignIn.disconnect();
   FirebaseAuth.instance.signOut();
 }
+}
+
+
+
+class ProductsSearch extends SearchDelegate<Single_prod>{
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [IconButton(icon: Icon(Icons.clear), onPressed: (){
+      query="";
+    },)];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(onPressed: (){
+      close(context, null);
+    }, icon: Icon(Icons.arrow_back),);
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // TODO: implement buildResults
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+   final mylist = query.isEmpty? loadProdItem() 
+       : loadProdItem().where((p)=> p.name.startsWith(query)).toList();
+   return mylist.isEmpty? Text("No Results Found...."): ListView.builder(
+       itemCount: mylist.length,
+       itemBuilder: (context, index){
+         final ProdItem fi = mylist[index];
+         return ListTile(title:Text(fi.name),);
+       });
+  }
+
 }
