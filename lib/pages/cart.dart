@@ -34,16 +34,16 @@ class _CartState extends State<Cart> {
           color: Colors.white,
           child: Row(
               children: <Widget>[
-                Expanded(child: ListTile(
-                  title: new Text("Total:"),
-                  subtitle: new Text("Php250"),
-                )),
-                Expanded(
-                    child: new MaterialButton(onPressed: () {},
-                      child: new Text(
-                        "Check out", style: TextStyle(color: Colors.white),),
-                      color: Colors.red,)
-                )
+                // Expanded(child: ListTile(
+                //   title: new Text("Total:"),
+                //   subtitle: new Text("Php250"),
+                // )),
+                // Expanded(
+                //     child: new MaterialButton(onPressed: () {},
+                //       child: new Text(
+                //         "Check out", style: TextStyle(color: Colors.white),),
+                //       color: Colors.red,)
+                // )
               ]
           )
       ),

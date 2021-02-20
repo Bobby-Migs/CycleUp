@@ -54,6 +54,10 @@ class Single_cart_product extends StatelessWidget {
   final cart_prod_hour;
   final cart_prod_date;
   final cart_prod_quantity;
+  final prod_detail_total;
+  final prod_detail_date;
+  final prod_type;
+
 
   Single_cart_product(
       {this.cart_prod_name,
@@ -61,7 +65,11 @@ class Single_cart_product extends StatelessWidget {
       this.cart_prod_price,
       this.cart_prod_hour,
       this.cart_prod_date,
-      this.cart_prod_quantity});
+      this.cart_prod_quantity,
+        this.prod_detail_total,
+        this.prod_detail_date,
+        this.prod_type,
+      });
 
   @override
   Widget build(BuildContext context) {

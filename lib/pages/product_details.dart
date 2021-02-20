@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:cycle_up/main.dart';
 import 'package:cycle_up/pages/home.dart';
 import 'package:flutter/services.dart';
+import 'package:cycle_up/components/cart_products.dart';
 
 class ProductDetails extends StatefulWidget {
   final prod_detail_name;
@@ -13,14 +14,20 @@ class ProductDetails extends StatefulWidget {
   final prod_detail_old_price;
   final prod_detail_picture;
   final prod_detail_frameset;
-
+  final prod_detail_total;
+  final prod_detail_date;
+  final prod_type;
 
   ProductDetails({
     this.prod_detail_name,
     this.prod_detail_new_price,
     this.prod_detail_old_price,
     this.prod_detail_picture,
-    this.prod_detail_frameset
+    this.prod_detail_frameset,
+    this.prod_detail_total,
+    this.prod_detail_date,
+    this.prod_type,
+
   });
 
   @override
@@ -34,6 +41,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   String dropdownValue = '';
   String textValue='';
   int numValue=0;
+
 
   bool disabledropdown = true;
   List<DropdownMenuItem<String>> menuitems = List();
@@ -109,7 +117,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   void secondvaluechanged(_value){
    // numValue=int.parse(_value);
-    getHrDay = _value;
+    getHrDay =  int.parse(_value);
     totalRentType = typeValue * int.parse(_value);
     setState((){
       dropdownValue = _value;
@@ -124,7 +132,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   final f = new DateFormat('yyyy-MM-dd hh:mm');
   // HOURS VARIABLE
   final myController = TextEditingController();
-  // QUANTITY DROPDOWN
+
+
 
 
   //<<<<<< OVERRIDE FOR HOURS >>>>>>
@@ -366,7 +375,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         onChanged: (_value) => {
                           print(_value.toString()),
                           setState((){
-                            dropdownValueTwo = _value;
+                            new Text(dropdownValueTwo = _value);
                           }),
                         },
 
@@ -425,7 +434,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   new Text("$textValue:  ", style: TextStyle(fontWeight: FontWeight.bold)),
-                                  new Text(dropdownValue),
+                                  new Text(getHrDay.toString()),
                                 ],
                               ),
                               Row(
@@ -474,12 +483,23 @@ class _ProductDetailsState extends State<ProductDetails> {
               new IconButton(
                   icon: Icon(Icons.add_shopping_cart),
                   color: Colors.red,
-                  onPressed: () {
-                  }),
-              new IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  color: Colors.red,
-                  onPressed: () {}),
+                  onPressed: (){},
+                    //   () => Navigator.of(context).push(new MaterialPageRoute(
+                    // // here we are passing the values of the product to the product details page
+                    //   builder: (context) => new Single_cart_product(
+                    //     cart_prod_name: widget.prod_detail_name,
+                    //     prod_detail_total: finalTotal,
+                    //     cart_prod_picture: widget.prod_detail_picture,
+                    //     prod_detail_date: f.format(selectedDate),
+                    //
+                    //   )))
+              ),
+              Center(
+                child: new IconButton(
+                    icon: Icon(Icons.favorite_border),
+                    color: Colors.red,
+                    onPressed: () {}),
+              ),
             ],
           ),
           Divider(),
