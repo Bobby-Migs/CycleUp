@@ -2,6 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Cart_products extends StatefulWidget {
+  final prod_detail_name;
+  final prod_detail_new_price;
+  final prod_detail_old_price;
+  final prod_detail_picture;
+  final prod_detail_frameset;
+  final prod_detail_total;
+  final prod_detail_date;
+  final prod_type;
+
+  Cart_products({
+    this.prod_detail_name,
+    this.prod_detail_new_price,
+    this.prod_detail_old_price,
+    this.prod_detail_picture,
+    this.prod_detail_frameset,
+    this.prod_detail_total,
+    this.prod_detail_date,
+    this.prod_type,
+
+  });
+
   @override
   _Cart_productsState createState() => _Cart_productsState();
 }
@@ -54,9 +75,6 @@ class Single_cart_product extends StatelessWidget {
   final cart_prod_hour;
   final cart_prod_date;
   final cart_prod_quantity;
-  final prod_detail_total;
-  final prod_detail_date;
-  final prod_type;
 
 
   Single_cart_product(
@@ -66,9 +84,6 @@ class Single_cart_product extends StatelessWidget {
       this.cart_prod_hour,
       this.cart_prod_date,
       this.cart_prod_quantity,
-        this.prod_detail_total,
-        this.prod_detail_date,
-        this.prod_type,
       });
 
   @override

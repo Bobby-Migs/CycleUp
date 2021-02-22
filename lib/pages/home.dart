@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cycle_up/components/horizontal_listview.dart';
 import 'package:cycle_up/components/products.dart';
 import 'package:cycle_up/pages/cart.dart';
+import 'package:cycle_up/pages/myRentals.dart';
 
 //trial
 //import 'package:cycle_up/widget/logged_in_widget.dart';
@@ -107,7 +108,9 @@ class _HomePageState extends State<HomePage> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new Rentals()));
+              },
               child: ListTile(
                 title: Text('My Rentals'),
                 leading: Icon(Icons.directions_bike_outlined, color: Colors.red),

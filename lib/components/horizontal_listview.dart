@@ -12,7 +12,7 @@ class HorizontalList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 110.0,
+      height: 115.0,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
@@ -66,6 +66,7 @@ class Road_Bike extends StatelessWidget {
           Navigator.push(context, MaterialPageRoute(builder: (context)=> new RoadBike()));
         },
         child: Container(
+          height: 200.0,
           width: 100.0,
           child: ListTile(
             title: Image.asset(
@@ -94,6 +95,7 @@ class BMX extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
+
       child: InkWell(
         onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context)=> new Bmx()));

@@ -44,7 +44,7 @@ class _FoldingState extends State<FoldingBike> {
         body: new ListView(
             children: <Widget>[
               Container(
-                height: 360.0,
+                height:560.0,
                 child: Similar_products(),
               ),
             ]

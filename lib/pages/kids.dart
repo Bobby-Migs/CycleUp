@@ -44,7 +44,7 @@ class _KidsState extends State<KidsBike> {
         body: new ListView(
             children: <Widget>[
               Container(
-                height: 360.0,
+                height:560.0,
                 child: Similar_products(),
               ),
             ]

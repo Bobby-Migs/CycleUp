@@ -6,9 +6,68 @@ import 'package:flutter/material.dart';
 import 'package:cycle_up/main.dart';
 import 'package:cycle_up/pages/home.dart';
 import 'package:flutter/services.dart';
-import 'package:cycle_up/components/cart_products.dart';
+import 'package:cycle_up/pages/cart.dart';
+
+class Carts_products extends StatefulWidget {
+  @override
+  _Carts_productsState createState() => _Carts_productsState();
+}
+
+class _Carts_productsState extends State<Carts_products> {
+  var product_list = [
+    {
+      "name": "SD AM",
+      "picture": "images/products/SD_AM.png",
+      "old_price": 150,
+      "price": 100,
+      "frameset": "Full Cr-Mo Frame ",
+    },
+    {
+      "name": "Cantina",
+      "picture": "images/products/cantina.png",
+      "old_price": 150,
+      "price": 100,
+      "frameset": "Full Cr-Mo Frame ",
+    },
+    {
+      "name": "Cantina",
+      "picture": "images/products/cantina.png",
+      "old_price": 150,
+      "price": 100,
+      "frameset": "Full Cr-Mo Frame ",
+    },
+    {
+      "name": "Cantina",
+      "picture": "images/products/cantina.png",
+      "old_price": 150,
+      "price": 100,
+      "frameset": "Full Cr-Mo Frame ",
+    },
+
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+        itemCount: product_list.length,
+        gridDelegate:
+        new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemBuilder: (BuildContext context, int index) {
+          return ProductDetails(
+            prod_detail_name: product_list[index]['name'],
+            prod_detail_picture: product_list[index]['picture'],
+            prod_detail_old_price: product_list[index]['old_price'],
+            prod_detail_new_price: product_list[index]['price'],
+            prod_detail_frameset: product_list[index]['frameset'],
+          );
+        });
+  }
+}
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 class ProductDetails extends StatefulWidget {
+
   final prod_detail_name;
   final prod_detail_new_price;
   final prod_detail_old_price;
@@ -36,12 +95,10 @@ class ProductDetails extends StatefulWidget {
 
 
 class _ProductDetailsState extends State<ProductDetails> {
-
   String dropdownValueTwo = '';
   String dropdownValue = '';
   String textValue='';
   int numValue=0;
-
 
   bool disabledropdown = true;
   List<DropdownMenuItem<String>> menuitems = List();
@@ -123,16 +180,23 @@ class _ProductDetailsState extends State<ProductDetails> {
       dropdownValue = _value;
     });
   }
+
+  void getFinalTotal(){
+     finalTotal = totalRentType + (int.parse(dropdownValueTwo)*widget.prod_detail_new_price);
+}
+
   int getHrDay=0;
   int typeValue=0;
   int totalRentType=0;
-  int finalTotal = 0;
+   int finalTotal = 0;
+
+
   // DATE VARIABLE
   DateTime selectedDate = DateTime.now();
   final f = new DateFormat('yyyy-MM-dd hh:mm');
   // HOURS VARIABLE
   final myController = TextEditingController();
-
+  bool pressed = false;
 
 
 
@@ -143,6 +207,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     myController.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +231,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
       body: new ListView(
         children: <Widget>[
+          pressed ? Text(" Congratulation, Rental Successfull ") : SizedBox(),
           new Container(
             height: 300.0,
             child: GridTile(
@@ -191,7 +258,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           )),
                       Expanded(
                           child: new Text(
-                            "\$${widget.prod_detail_new_price}",
+                            "\Php${widget.prod_detail_new_price}",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, color: Colors.red),
                           )),
@@ -375,7 +442,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         onChanged: (_value) => {
                           print(_value.toString()),
                           setState((){
-                            new Text(dropdownValueTwo = _value);
+                            dropdownValueTwo = _value;
                           }),
                         },
 
@@ -392,14 +459,14 @@ class _ProductDetailsState extends State<ProductDetails> {
             ],
           ),
 
-          // ======== the second buttons ===========
+          // ======== the Rent now button ===========
           Row(
             children: <Widget>[
               //<<<<<<<<<<<<<<< the size button >>>>>>>>>>>
-
               Expanded(
                 child: MaterialButton(
                     onPressed: () {
+                      getFinalTotal();
                       showDialog(context: context, builder: (context) {
                         return new AlertDialog(
                           title: new Text("Rental Details"),
@@ -449,14 +516,27 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   new Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                                  new Text((widget.prod_detail_new_price + totalRentType + int.parse(dropdownValueTwo)).toString()),
+                                  new Text(finalTotal.toString()),
+                          // Similar_single_prod(
+                          //   prod_name: widget.prod_detail_name,
+                          //   prod_picture: widget.prod_detail_picture,
+                          //   prod_price: finalTotal,
+                          //   prod_: product_list[index]['frameset'],
+                          // );
                                 ],
                               ),
                             ],
                           ),
 
                           actions: <Widget>[
-                            new MaterialButton(onPressed: (){
+
+                            new MaterialButton(
+
+                              onPressed: (){
+                              Navigator.of(context).pop(context);
+                                setState(() {
+                                  pressed = true;
+                                });
 
                             },
                               child: new Text("              Rent Now              "),
@@ -469,7 +549,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                             new MaterialButton(onPressed: (){
                               Navigator.of(context).pop(context);
                             },
-                              child: new Text("close"),)
+                              child: new Text("close"),),
+                            // pressed ? Text(" text is here ") : SizedBox(),
                           ],
                         );
                       });
@@ -483,16 +564,16 @@ class _ProductDetailsState extends State<ProductDetails> {
               new IconButton(
                   icon: Icon(Icons.add_shopping_cart),
                   color: Colors.red,
-                  onPressed: (){},
+                  onPressed:(){Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));}
                     //   () => Navigator.of(context).push(new MaterialPageRoute(
                     // // here we are passing the values of the product to the product details page
-                    //   builder: (context) => new Single_cart_product(
-                    //     cart_prod_name: widget.prod_detail_name,
-                    //     prod_detail_total: finalTotal,
-                    //     cart_prod_picture: widget.prod_detail_picture,
-                    //     prod_detail_date: f.format(selectedDate),
+                    //   builder: (context) => new Cart_products(
                     //
-                    //   )))
+                    //     cart_prod_price: prod_price,
+                    //     cart_prod_picture: prod_picture,
+                    //     cart_prod_quantity: prod_frameset,
+                    //   ))),
+
               ),
               Center(
                 child: new IconButton(
@@ -565,6 +646,9 @@ class _ProductDetailsState extends State<ProductDetails> {
 
 }
 
+
+
+
 class Similar_products extends StatefulWidget {
   @override
   _Similar_productsState createState() => _Similar_productsState();
@@ -578,6 +662,7 @@ class _Similar_productsState extends State<Similar_products> {
       "old_price": 150,
       "price": 100,
       "frameset": "Full Cr-Mo Frame ",
+
     },
     {
       "name": "Cantina",
@@ -628,13 +713,15 @@ class Similar_single_prod extends StatelessWidget {
   final prod_price;
   final prod_old_price;
   final prod_frameset;
+  final prod_total;
 
   Similar_single_prod(
       {this.prod_name,
         this.prod_picture,
         this.prod_old_price,
         this.prod_price,
-        this.prod_frameset
+        this.prod_frameset,
+        this.prod_total
       });
 
 
