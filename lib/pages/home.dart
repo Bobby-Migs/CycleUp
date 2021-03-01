@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
           imageCarousel,
           //PADDING WIDGET
           new Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(0.0),
             child: new
             Text(''),
           ), //Padding
@@ -180,8 +180,8 @@ class _HomePageState extends State<HomePage> {
          // HorizontalList(),
           //PADDING WIDGET
           new Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: new Text('Recent Bikes'),
+            padding: const EdgeInsets.fromLTRB(4.0, 5.0, 1.0, 5.0),
+            child: new Text('Bike Collections'),
           ),
 
           //GRID VIEW
