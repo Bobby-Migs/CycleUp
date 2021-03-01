@@ -3,10 +3,11 @@ import 'package:cycle_up/components/cart_products.dart';
 import 'package:intl/intl.dart';
 import 'package:cycle_up/components/horizontal_listview.dart';
 import 'package:flutter/material.dart';
-import 'package:cycle_up/main.dart';
 import 'package:cycle_up/pages/home.dart';
 import 'package:flutter/services.dart';
 import 'package:cycle_up/pages/cart.dart';
+import 'package:cycle_up/components/databaseManager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Carts_products extends StatefulWidget {
   @override
@@ -14,51 +15,41 @@ class Carts_products extends StatefulWidget {
 }
 
 class _Carts_productsState extends State<Carts_products> {
-  var product_list = [
-    {
-      "name": "SD AM",
-      "picture": "images/products/SD_AM.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Cantina",
-      "picture": "images/products/cantina.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Cantina",
-      "picture": "images/products/cantina.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Cantina",
-      "picture": "images/products/cantina.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
+  List userProductList = [];
 
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await databaseManager().getUsersList();
+
+    if(resultant == null){
+      print('Unable to retrieve');
+    }else {
+      setState(() {
+        userProductList = resultant;
+      });
+    }
+  }
+  get index => null;
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        itemCount: product_list.length,
+        itemCount: userProductList.length,
         gridDelegate:
         new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return ProductDetails(
-            prod_detail_name: product_list[index]['name'],
-            prod_detail_picture: product_list[index]['picture'],
-            prod_detail_old_price: product_list[index]['old_price'],
-            prod_detail_new_price: product_list[index]['price'],
-            prod_detail_frameset: product_list[index]['frameset'],
+            prod_detail_name: userProductList[index]['name'],
+            prod_detail_picture: userProductList[index]['picture'],
+            prod_detail_new_price: userProductList[index]['price'],
+            prod_detail_frameset: userProductList[index]['frameset'],
+            prod_detail_fork: userProductList[index]['fork'],
+            prod_detail_cranks: userProductList[index]['cranks'],
           );
         });
   }
@@ -70,22 +61,24 @@ class ProductDetails extends StatefulWidget {
 
   final prod_detail_name;
   final prod_detail_new_price;
-  final prod_detail_old_price;
+  final prod_detail_cranks;
   final prod_detail_picture;
   final prod_detail_frameset;
   final prod_detail_total;
   final prod_detail_date;
   final prod_type;
+  final prod_detail_fork;
 
   ProductDetails({
     this.prod_detail_name,
     this.prod_detail_new_price,
-    this.prod_detail_old_price,
+    this.prod_detail_cranks,
     this.prod_detail_picture,
     this.prod_detail_frameset,
     this.prod_detail_total,
     this.prod_detail_date,
     this.prod_type,
+    this.prod_detail_fork
 
   });
 
@@ -95,6 +88,7 @@ class ProductDetails extends StatefulWidget {
 
 
 class _ProductDetailsState extends State<ProductDetails> {
+  final user = FirebaseAuth.instance.currentUser;
   String dropdownValueTwo = '';
   String dropdownValue = '';
   String textValue='';
@@ -212,6 +206,9 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   Widget build(BuildContext context) {
+    Future createCartList(String _image, String bikeName, int price, String frameset, String fork, String cranks) async {
+      await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks);
+    }
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.1,
@@ -237,7 +234,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: GridTile(
               child: Container(
                 color: Colors.white,
-                child: Image.asset(widget.prod_detail_picture),
+                child: Image.network(widget.prod_detail_picture, fit: BoxFit.cover,),
               ),
               footer: new Container(
                 color: Colors.white70,
@@ -249,13 +246,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                   title: new Row(
                     children: <Widget>[
-                      Expanded(
-                          child: new Text(
-                            "${widget.prod_detail_old_price}",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                decoration: TextDecoration.lineThrough),
-                          )),
                       Expanded(
                           child: new Text(
                             "\Php${widget.prod_detail_new_price}",
@@ -472,7 +462,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           title: new Text("Rental Details"),
                           content: Column(
                             children: [
-                              Image.asset(widget.prod_detail_picture),
+                              Image.network(widget.prod_detail_picture, height: 200,),
                               Divider(indent: 1.0,color: Colors.white),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -517,12 +507,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 children: [
                                   new Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
                                   new Text(finalTotal.toString()),
-                          // Similar_single_prod(
-                          //   prod_name: widget.prod_detail_name,
-                          //   prod_picture: widget.prod_detail_picture,
-                          //   prod_price: finalTotal,
-                          //   prod_: product_list[index]['frameset'],
-                          // );
                                 ],
                               ),
                             ],
@@ -564,15 +548,12 @@ class _ProductDetailsState extends State<ProductDetails> {
               new IconButton(
                   icon: Icon(Icons.add_shopping_cart),
                   color: Colors.red,
-                  onPressed:(){Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));}
-                    //   () => Navigator.of(context).push(new MaterialPageRoute(
-                    // // here we are passing the values of the product to the product details page
-                    //   builder: (context) => new Cart_products(
-                    //
-                    //     cart_prod_price: prod_price,
-                    //     cart_prod_picture: prod_picture,
-                    //     cart_prod_quantity: prod_frameset,
-                    //   ))),
+                  onPressed:(){
+                    createCartList(widget.prod_detail_picture, widget.prod_detail_name, widget.prod_detail_new_price, widget.prod_detail_frameset,
+                        widget.prod_detail_fork, widget.prod_detail_cranks);
+                   // Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
+
+                  }
 
               ),
               Center(
@@ -583,6 +564,11 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: new Text('Owner: '+user.displayName),
+          ),
+
           Divider(),
           new ListTile(
             title: new Text("FEATURES"),
@@ -595,7 +581,10 @@ class _ProductDetailsState extends State<ProductDetails> {
           new Row(
             children: <Widget>[
               Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-              child: new Text("FRAMESET",style: TextStyle(color: Colors.grey),),)
+              child: new Text("FRAMESET",style: TextStyle(color: Colors.grey),),),
+               Padding(padding: EdgeInsets.all(5.0),
+               child: new Text(widget.prod_detail_frameset),
+               ),
             ]
           ),
 
@@ -604,7 +593,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
                   child: new Text("FORK",style: TextStyle(color: Colors.grey),),),
                 Padding(padding: EdgeInsets.all(5.0),
-                child: new Text(widget.prod_detail_frameset),
+                child: new Text(widget.prod_detail_fork),
                 ),
               ],
           ),
@@ -612,7 +601,10 @@ class _ProductDetailsState extends State<ProductDetails> {
           new Row(
               children: <Widget>[
                 Padding(padding: const EdgeInsets.fromLTRB(12.0, 5.0, 5.0, 5.0),
-                  child: new Text("CRANKS",style: TextStyle(color: Colors.grey),),)
+                  child: new Text("CRANKS",style: TextStyle(color: Colors.grey),),),
+                Padding(padding: EdgeInsets.all(5.0),
+                  child: new Text(widget.prod_detail_cranks),
+                )
               ]
           ),
           Divider(),
@@ -622,8 +614,9 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
           //SIMILAR PRODUCTS SECTION
           Container(
-            height: 360.0,
-            child: Similar_products(),
+            height: 70.0,
+            child:Text(''),
+            //Similar_products(),
           ),
         ],
       ),
@@ -655,53 +648,41 @@ class Similar_products extends StatefulWidget {
 }
 
 class _Similar_productsState extends State<Similar_products> {
-  var product_list = [
-    {
-      "name": "SD AM",
-      "picture": "images/products/SD_AM.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
+  List userProductList = [];
 
-    },
-    {
-      "name": "Cantina",
-      "picture": "images/products/cantina.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Cantina",
-      "picture": "images/products/cantina.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Cantina",
-      "picture": "images/products/cantina.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList();
+  }
 
+  fetchDatabaseList() async {
+    dynamic resultant = await databaseManager().getUsersList();
 
-  ];
+    if(resultant == null){
+      print('Unable to retrieve');
+    }else {
+      setState(() {
+        userProductList = resultant;
+      });
+    }
+  }
+  get index => null;
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        itemCount: product_list.length,
+        itemCount: userProductList.length,
         gridDelegate:
         new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Similar_single_prod(
-            prod_name: product_list[index]['name'],
-            prod_picture: product_list[index]['picture'],
-            prod_old_price: product_list[index]['old_price'],
-            prod_price: product_list[index]['price'],
-            prod_frameset: product_list[index]['frameset'],
+            prod_name: userProductList[index]['name'],
+            prod_picture: userProductList[index]['picture'],
+            prod_fork: userProductList[index]['fork'],
+            prod_price: userProductList[index]['price'],
+            prod_frameset: userProductList[index]['frameset'],
+            prod_cranks: userProductList[index]['cranks'],
           );
         });
   }
@@ -711,17 +692,19 @@ class Similar_single_prod extends StatelessWidget {
   final prod_name;
   final prod_picture;
   final prod_price;
-  final prod_old_price;
+  final prod_fork;
   final prod_frameset;
-  final prod_total;
+  final prod_cranks;
+ // final prod_total;
 
   Similar_single_prod(
       {this.prod_name,
         this.prod_picture,
-        this.prod_old_price,
+        this.prod_fork,
         this.prod_price,
         this.prod_frameset,
-        this.prod_total
+        this.prod_cranks,
+      //  this.prod_total
       });
 
 
@@ -737,9 +720,10 @@ class Similar_single_prod extends StatelessWidget {
                   builder: (context) => new ProductDetails(
                     prod_detail_name: prod_name,
                     prod_detail_new_price: prod_price,
-                    prod_detail_old_price: prod_old_price,
+                    prod_detail_fork: prod_fork,
                     prod_detail_picture: prod_picture,
                     prod_detail_frameset: prod_frameset,
+                    prod_detail_cranks: prod_cranks,
                   ))),
               child: GridTile(
                   footer: Container(
@@ -751,10 +735,8 @@ class Similar_single_prod extends StatelessWidget {
                         new Text("\Php${prod_price}", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
                       ],)
                   ),
-                  child: Image.asset(
-                    prod_picture,
-                    fit: BoxFit.cover,
-                  )),
+                  child: Image.network(prod_picture, fit: BoxFit.cover,),
+              ),
             ),
           )),
     );

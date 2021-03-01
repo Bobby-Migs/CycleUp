@@ -92,7 +92,9 @@ class _HomePageState extends State<HomePage> {
             //  body
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+              },
               child: ListTile(
                 title: Text('Home Page'),
                 leading: Icon(Icons.home, color: Colors.red),
@@ -170,11 +172,12 @@ class _HomePageState extends State<HomePage> {
           //PADDING WIDGET
           new Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Text('Categories'),
+            child: new
+            Text(''),
           ), //Padding
 
           //START OF HORIZONTAL LIST VIEW
-          HorizontalList(),
+         // HorizontalList(),
           //PADDING WIDGET
           new Padding(
             padding: const EdgeInsets.all(20.0),

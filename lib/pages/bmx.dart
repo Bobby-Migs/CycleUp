@@ -164,7 +164,7 @@ class Similar_single_prod extends StatelessWidget {
                   builder: (context) => new ProductDetails(
                     prod_detail_name: prod_name,
                     prod_detail_new_price: prod_price,
-                    prod_detail_old_price: prod_old_price,
+                    prod_detail_fork: prod_old_price,
                     prod_detail_picture: prod_picture,
                     prod_detail_frameset: prod_frameset,
                   ))),

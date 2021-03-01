@@ -4,8 +4,9 @@ import 'package:cycle_up/pages/imageModel.dart';
 import 'package:flutter/material.dart';
 import 'package:cycle_up/pages/list_tile_widget.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 class CameraButtonWidget extends StatelessWidget {
+  final _storage = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) => ListTileWidget(
     text:'From Camera',
@@ -21,6 +22,8 @@ class CameraButtonWidget extends StatelessWidget {
 
     final media = await getMedia(source: ImageSource.camera);
     final file = File(media.path);
+
+
 
     Navigator.of(context).pop(file);
   }

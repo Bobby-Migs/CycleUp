@@ -1,60 +1,37 @@
+import 'package:cycle_up/components/databaseManager.dart';
 import 'package:flutter/material.dart';
 import 'package:cycle_up/pages/product_details.dart';
 import 'package:cycle_up/pages/home.dart';
+import 'package:cycle_up/components/databaseManager.dart';
 
 class Products extends StatefulWidget {
-
-
   @override
   _ProductsState createState() => _ProductsState();
 }
 
-class _ProductsState extends State<Products> {
-  var product_list = [
-    {
-      "name": "SD AM",
-      "picture": "images/products/SD_AM.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Cantina",
-      "picture": "images/products/cantina.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Downtown 24",
-      "picture": "images/products/downtown_24.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Leucadia",
-      "picture": "images/products/leucadia.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Shredder 12",
-      "picture": "images/products/shredder_12.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
-    {
-      "name": "Tradewind hd",
-      "picture": "images/products/tradewind_hd.png",
-      "old_price": 150,
-      "price": 100,
-      "frameset": "Full Cr-Mo Frame ",
-    },
 
-  ];
+class _ProductsState extends State<Products> {
+  List userProductList = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await databaseManager().getUsersList();
+
+    if(resultant == null){
+      print('Unable to retrieve');
+    }else {
+      setState(() {
+        userProductList = resultant;
+      });
+    }
+  }
+
 
   get index => null;
 
@@ -62,16 +39,17 @@ class _ProductsState extends State<Products> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        itemCount: product_list.length,
+        itemCount: userProductList.length,
         gridDelegate:
         new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (BuildContext context, int index) {
           return Single_prod(
-            prod_name: product_list[index]['name'],
-            prod_picture: product_list[index]['picture'],
-            prod_old_price: product_list[index]['old_price'],
-            prod_price: product_list[index]['price'],
-            prod_frameset: product_list[index]['frameset'],
+            prod_name: userProductList[index]['bikeName'],
+            prod_picture: userProductList[index]['picture'],
+            prod_price: userProductList[index]['price'],
+            prod_frameset: userProductList[index]['frameset'],
+            prod_cranks: userProductList[index]['cranks'],
+            prod_fork: userProductList[index]['fork'],
           );
         });
   }
@@ -84,15 +62,18 @@ class Single_prod extends StatelessWidget {
   final prod_price;
   final prod_old_price;
   final prod_frameset;
+  final prod_cranks;
+  final prod_fork;
 
   Single_prod(
       {this.prod_name,
       this.prod_picture,
       this.prod_old_price,
       this.prod_price,
-      this.prod_frameset
+      this.prod_frameset,
+      this.prod_cranks,
+      this.prod_fork
       });
-
 
   @override
   Widget build(BuildContext context) {
@@ -106,12 +87,13 @@ class Single_prod extends StatelessWidget {
                   builder: (context) => new ProductDetails(
                     prod_detail_name: prod_name,
                     prod_detail_new_price: prod_price,
-                    prod_detail_old_price: prod_old_price,
                     prod_detail_picture: prod_picture,
                     prod_detail_frameset: prod_frameset,
+                    prod_detail_cranks: prod_cranks,
+                    prod_detail_fork: prod_fork,
                   ),
               )),
-              child: GridTile(
+              child: GridTile (
                   footer: Container(
                     color: Colors.white70,
                     child: new Row(children: <Widget>[
@@ -121,10 +103,9 @@ class Single_prod extends StatelessWidget {
                       new Text("\Php${prod_price}", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
                     ],)
                   ),
-                  child: Image.asset(
-                    prod_picture,
-                    fit: BoxFit.cover,
-                  ),
+                   child:Image.network(prod_picture),
+                // Image.asset
+                //   ('images/products/cantina.png', fit: BoxFit.cover,),
               ),
             ),
 
@@ -144,6 +125,8 @@ class ProdItem{
   });
 }
 List<ProdItem> loadProdItem(){
+
+
   var fi = <ProdItem>[
     ProdItem(
         name: "SD AM",

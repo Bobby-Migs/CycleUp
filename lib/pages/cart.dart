@@ -41,9 +41,7 @@ class _CartState extends State<Cart> {
         ],
       ),
 
-      body: InkWell(
-          onTap: () {},
-          child: new Cart_products()),
+      body: new Cart_products(),
 
       bottomNavigationBar: new Container(
           color: Colors.white,

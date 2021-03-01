@@ -1,16 +1,15 @@
-
 import 'dart:io';
+import 'package:cycle_up/components/databaseManager.dart';
 import 'package:cycle_up/pages/imageSource.dart';
 import 'package:flutter/material.dart';
-import 'package:cycle_up/pages/product_details.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart' as validator ;
 import 'package:cycle_up/pages/rentalOutput.dart';
 import 'package:cycle_up/pages/result.dart';
-
-import 'package:cycle_up/components/cart_products.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'imageModel.dart';
+import 'package:cycle_up/pages/home.dart';
 
 class Rentals extends StatefulWidget {
 
@@ -19,32 +18,16 @@ class Rentals extends StatefulWidget {
 }
 
 class _RentalsState extends State<Rentals> {
-  // File fileMedia;
-  // Future getImage(MediaSource source) async {
-  //   final result = await Navigator.of(context).push(
-  //       MaterialPageRoute(
-  //         builder: (context) => SourcePage(),
-  //         settings: RouteSettings(
-  //           arguments: source,
-  //         ),
-  //       ),
-  //   );
-  //   if (result == null){
-  //     return;
-  //   } else {
-  //     setState(() {
-  //       fileMedia = result;
-  //     });
-  //
-  //   }
-  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: new AppBar(
           elevation: 0.2,
           backgroundColor: Colors.red,
-          title: Text('My Rentals'),
+          title: InkWell(
+              onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));},
+              child: Text('Cycle Up')),
           actions: <Widget>[
             new IconButton(
                 icon: Icon(
@@ -65,20 +48,6 @@ class _RentalsState extends State<Rentals> {
                    mainAxisAlignment: MainAxisAlignment.start,
                    children: <Widget>[
                      Container(
-                       // child: Column(
-                       //   children: [
-                       //     fileMedia == null ? Icon(Icons.photo, size: 120) : Image.file(fileMedia, width: 100,height: 150,),
-                       //     new MaterialButton(
-                       //       onPressed: (){
-                       //         getImage(MediaSource.image);
-                       //       },
-                       //       child: Text("Upload Image"),
-                       //       color: Colors.red,
-                       //       textColor: Colors.white,
-                       //       elevation: 0.2,
-                       //     )
-                       //   ],
-                       // ),
                      ),
                      Container(
 
@@ -91,8 +60,6 @@ class _RentalsState extends State<Rentals> {
             ]
         )
 
-
-
     );
   }
 }
@@ -104,8 +71,13 @@ class TestForm extends StatefulWidget {
 }
 
 class _TestFormState extends State<TestForm> {
-
   File fileMedia;
+  String imgUrl= "";
+
+  final _formKey = GlobalKey<FormState>();
+  RentalOutput model = RentalOutput();
+
+  final _storage = FirebaseStorage.instance;
   Future getImage(MediaSource source) async {
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
@@ -116,23 +88,32 @@ class _TestFormState extends State<TestForm> {
       ),
     );
 
-
     if (result == null){
+      //var snapshot = await _storage.ref();
+      print('No Path Received');
       return;
     } else {
       setState(() {
         fileMedia = result;
       });
+      String imageFileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference reference= _storage.ref().child(imageFileName);
+      UploadTask uploadTask = reference.putFile(fileMedia);
+      TaskSnapshot taskSnapshot = await uploadTask;
+      await taskSnapshot.ref.getDownloadURL().then((urlImg){
+        imgUrl = urlImg;
+      });
 
     }
   }
 
-  final _formKey = GlobalKey<FormState>();
-  RentalOutput model = RentalOutput();
-
   @override
   Widget build(BuildContext context) {
     final halfMediaWidth = MediaQuery.of(context).size.width /2.10;
+
+    Future createProduct(String _image, String bikeName, int price, String frameset, String fork, String cranks) async {
+      await databaseManager().createUserData(_image, bikeName, price, frameset, fork, cranks);
+    }
 
     return Form(
       key: _formKey,
@@ -143,6 +124,7 @@ class _TestFormState extends State<TestForm> {
 
               children: [
                 fileMedia == null ? Icon(Icons.photo, size: 120) : Image.file(fileMedia, width: 100,height: 150,),
+
                 new MaterialButton(
                   onPressed: (){
                     getImage(MediaSource.image);
@@ -242,13 +224,19 @@ class _TestFormState extends State<TestForm> {
                 _formKey.currentState.save();
 
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
+                createProduct(imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks);
+                //updateUser();
               }
             },
+          ),
+          new Container(
+
           )
         ],
       ),
     );
   }
+
 }
 
 class MyTextFormField extends StatelessWidget{
