@@ -50,6 +50,8 @@ class _ProductsState extends State<Products> {
             prod_frameset: userProductList[index]['frameset'],
             prod_cranks: userProductList[index]['cranks'],
             prod_fork: userProductList[index]['fork'],
+            prod_features: userProductList[index]['features'],
+
           );
         });
   }
@@ -64,6 +66,7 @@ class Single_prod extends StatelessWidget {
   final prod_frameset;
   final prod_cranks;
   final prod_fork;
+  final prod_features;
 
   Single_prod(
       {this.prod_name,
@@ -72,7 +75,8 @@ class Single_prod extends StatelessWidget {
       this.prod_price,
       this.prod_frameset,
       this.prod_cranks,
-      this.prod_fork
+      this.prod_fork,
+      this.prod_features,
       });
 
   @override
@@ -91,6 +95,8 @@ class Single_prod extends StatelessWidget {
                     prod_detail_frameset: prod_frameset,
                     prod_detail_cranks: prod_cranks,
                     prod_detail_fork: prod_fork,
+                    prod_detail_features: prod_features,
+
                   ),
               )),
               child: GridTile (

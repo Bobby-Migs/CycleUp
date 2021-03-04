@@ -8,6 +8,7 @@ class RentalOutput {
   String frameset;
   String fork;
   String cranks;
+  String features;
   File img;
 
   RentalOutput({
@@ -16,6 +17,7 @@ class RentalOutput {
     this.frameset,
     this.fork,
     this.cranks,
+    this.features,
     this.img
 });
 }

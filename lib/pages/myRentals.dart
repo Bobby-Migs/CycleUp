@@ -96,6 +96,7 @@ class _TestFormState extends State<TestForm> {
       setState(() {
         fileMedia = result;
       });
+
       String imageFileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference reference= _storage.ref().child(imageFileName);
       UploadTask uploadTask = reference.putFile(fileMedia);
@@ -111,8 +112,8 @@ class _TestFormState extends State<TestForm> {
   Widget build(BuildContext context) {
     final halfMediaWidth = MediaQuery.of(context).size.width /2.10;
 
-    Future createProduct(String _image, String bikeName, int price, String frameset, String fork, String cranks) async {
-      await databaseManager().createUserData(_image, bikeName, price, frameset, fork, cranks);
+    Future createProduct(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
+      await databaseManager().createUserData(_image, bikeName, price, frameset, fork, cranks, features);
     }
 
     return Form(
@@ -212,6 +213,19 @@ class _TestFormState extends State<TestForm> {
               model.cranks = value;
             },
           ),
+          MyTextFormField(
+              hintText: 'Features (Optional)',
+              validator: (String value){
+                _formKey.currentState.save();
+                if (value.isEmpty){
+                  value = '';
+                }
+                return null;
+              },
+              onSaved: (String value){
+                model.features = value;
+              },
+            ),
           RaisedButton(
             color: Colors.red,
             child: Text('Submit',
@@ -224,7 +238,7 @@ class _TestFormState extends State<TestForm> {
                 _formKey.currentState.save();
 
                 Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
-                createProduct(imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks);
+                createProduct(imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks, model.features);
                 //updateUser();
               }
             },

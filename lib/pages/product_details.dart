@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cycle_up/components/cart_products.dart';
 import 'package:intl/intl.dart';
 import 'package:cycle_up/components/horizontal_listview.dart';
@@ -64,6 +65,7 @@ class ProductDetails extends StatefulWidget {
   final prod_detail_cranks;
   final prod_detail_picture;
   final prod_detail_frameset;
+  final prod_detail_features;
   final prod_detail_total;
   final prod_detail_date;
   final prod_type;
@@ -75,6 +77,7 @@ class ProductDetails extends StatefulWidget {
     this.prod_detail_cranks,
     this.prod_detail_picture,
     this.prod_detail_frameset,
+    this.prod_detail_features,
     this.prod_detail_total,
     this.prod_detail_date,
     this.prod_type,
@@ -89,6 +92,7 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   final user = FirebaseAuth.instance.currentUser;
+  bool _isButtonDisabled = false;
   String dropdownValueTwo = '';
   String dropdownValue = '';
   String textValue='';
@@ -119,14 +123,6 @@ class _ProductDetailsState extends State<ProductDetails> {
     "10": "10",
     "11": "11",
   };
-  // getNumValue(_value){
-  //
-  //   setState((){
-  //     numValue = int.parse(_value);
-  //   });
-  //   return numValue;
-  // }
-
   void populateday(){
     for(String key in Day.keys){
       menuitems.add(DropdownMenuItem<String>(
@@ -191,6 +187,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   // HOURS VARIABLE
   final myController = TextEditingController();
   bool pressed = false;
+  String countId = FirebaseFirestore.instance.collection("cartItems").doc().id;
+
 
 
 
@@ -206,9 +204,11 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   @override
   Widget build(BuildContext context) {
-    Future createCartList(String _image, String bikeName, int price, String frameset, String fork, String cranks) async {
-      await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks);
+
+    Future createCartList(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
+      await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks, features, countId);
     }
+
     return Scaffold(
       appBar: new AppBar(
         elevation: 0.1,
@@ -549,10 +549,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                   icon: Icon(Icons.add_shopping_cart),
                   color: Colors.red,
                   onPressed:(){
+                    Single_cart_product(ctrId: countId.toString(),);
                     createCartList(widget.prod_detail_picture, widget.prod_detail_name, widget.prod_detail_new_price, widget.prod_detail_frameset,
-                        widget.prod_detail_fork, widget.prod_detail_cranks);
-                   // Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
+                        widget.prod_detail_fork, widget.prod_detail_cranks, widget.prod_detail_features,countId);
 
+                   // print(countId);
                   }
 
               ),
@@ -572,7 +573,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           Divider(),
           new ListTile(
             title: new Text("FEATURES"),
-            subtitle: new Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. "),
+            subtitle: new Text(widget.prod_detail_features),
           ),
           Divider(),
           new ListTile(
@@ -683,6 +684,7 @@ class _Similar_productsState extends State<Similar_products> {
             prod_price: userProductList[index]['price'],
             prod_frameset: userProductList[index]['frameset'],
             prod_cranks: userProductList[index]['cranks'],
+
           );
         });
   }

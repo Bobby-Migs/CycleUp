@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cycle_up/components/databaseManager.dart';
@@ -61,7 +62,7 @@ class Single_cart_product extends StatelessWidget {
   final cart_prod_frameset;
   final cart_prod_fork;
   final cart_prod_cranks;
-
+  String ctrId;
 
   Single_cart_product(
       {this.cart_prod_name,
@@ -70,6 +71,7 @@ class Single_cart_product extends StatelessWidget {
       this.cart_prod_frameset,
       this.cart_prod_fork,
       this.cart_prod_cranks,
+      this.ctrId
       });
 
   @override
@@ -92,7 +94,21 @@ class Single_cart_product extends StatelessWidget {
           leading: new Image.network(cart_prod_picture, width: 80.0, height: 80.0,),
 
           // <<<<<<<<<<<<< TITLE SECTION >>>>>>>>>>>>
-          title: new Text(cart_prod_name),
+          title: Row(
+            children: [
+              Container(
+                  width: MediaQuery.of(context).size.width /3,
+                  child: Text(cart_prod_name)),
+              Container(
+                child: MaterialButton(
+                    child: Text('Remove', style: TextStyle(color: Colors.red),),
+                    onPressed: (){
+                      print(ctrId);
+                      databaseManager().deleteUser(this.ctrId);
+                    }),
+              )
+            ],
+          ),
 
           //<<<<<<<<<<<<< SUBTITLE SECTION >>>>>>>>>>
           subtitle: new Column(
