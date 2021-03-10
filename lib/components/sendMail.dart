@@ -23,8 +23,18 @@ SendMail() async {
     ..recipients.add(user.email)
     ..subject = 'CycleUp Baguio  ${DateTime.now()}'
     ..text = 'bobby pogi!!!!!.\nThis is line 2 of the text part.'
-    ..html = "<h1>Rental Successfull</h1>\n<p>You will be notified once the bike you have rented is ready for pickup."
-        "Please arrive at the specified time of pick up and prepare the exact amount for the rental, you are also required to prepare a two valid ID. Thank you!.</p>";
+    ..html = "<h1>Rental Successfull</h1>\n<>You will be notified once the bike you have rented is ready for pickup."
+        "Please arrive at the specified time of pick up and prepare the exact amount for the rental, you are also required to prepare a two valid ID. Thank you!"
+        "<br/><br/><br/>"
+        "<h3>It shall be the responsibility of the Biker-Borrower to comply with the following:</h3>><br/><br/>"
+        ""
+        "1. It shall be the responsibility of the Biker to not ride on any lake or leave unsheltered on precipitous environments.<br/>"
+        "2. Biker shall comply with the proper traffic laws at all times.<br/>"
+        "3. Biker is not allowed to replace or substitute any parts or portion of the bicycle.<br/>"
+        "4. Biker is not required nor recommended to clean the bicycle prior to returning the said bicycle.<br/>"
+        "5. Biker is required to maintain proper responsibility in the user of the bicycle. BIker shall assume for any and all"
+        "liabilities, damage, loss, to property, or injury ralated to the rent and use of bicycle.<br/>"
+        "6. Biker is not allowed to sublease the bicycle rented with us.</p>";
 
   try {
     final sendReport = await send(message, smtpServer);

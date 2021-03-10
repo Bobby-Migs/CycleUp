@@ -2,6 +2,7 @@ import 'package:cycle_up/provider/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:cycle_up/components/chooseAccountForm.dart';
 
 class GoogleSignupButtonWidget extends StatelessWidget {
   @override
@@ -19,6 +20,11 @@ class GoogleSignupButtonWidget extends StatelessWidget {
       textColor: Colors.white,
       icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
       onPressed: () {
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => ChooseAccount()),
+        // );
+
         final provider =
         Provider.of<GoogleSignInProvider>(context, listen: false);
         provider.login();

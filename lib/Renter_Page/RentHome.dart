@@ -8,7 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 //my own imports
 import 'package:cycle_up/components/horizontal_listview.dart';
-import 'package:cycle_up/components/products.dart';
+import 'package:cycle_up/Renter_Page/RentProducts.dart';
 import 'package:cycle_up/pages/cart.dart';
 import 'package:cycle_up/pages/myRentals.dart';
 
@@ -16,13 +16,13 @@ import 'package:cycle_up/pages/myRentals.dart';
 //import 'package:cycle_up/widget/logged_in_widget.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class RentHomePage extends StatefulWidget {
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _RentHomePageState createState() => _RentHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _RentHomePageState extends State<RentHomePage> {
   final user = FirebaseAuth.instance.currentUser;
   final googleSignIn = GoogleSignIn();
   @override
@@ -59,14 +59,14 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 showSearch(context: context, delegate: ProductsSearch());
               }),
-          // new IconButton(
-          //     icon: Icon(
-          //       Icons.shopping_cart,
-          //       color: Colors.white,
-          //     ),
-          //     onPressed: () {
-          //       Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
-          //     })
+          new IconButton(
+              icon: Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
+              })
         ],
       ),
       drawer: new Drawer(
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
 
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new RentHomePage()));
               },
               child: ListTile(
                 title: Text('Home Page'),
@@ -111,23 +111,13 @@ class _HomePageState extends State<HomePage> {
 
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> new Rentals()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
               },
               child: ListTile(
-                title: Text('Create Listing'),
-                leading: Icon(Icons.add_to_photos_rounded, color: Colors.red),
+                title: Text('My Cart'),
+                leading: Icon(Icons.shopping_cart, color: Colors.red),
               ),
             ),
-
-            // InkWell(
-            //   onTap: () {
-            //     Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
-            //   },
-            //   child: ListTile(
-            //     title: Text('My Cart'),
-            //     leading: Icon(Icons.shopping_cart, color: Colors.red),
-            //   ),
-            // ),
 
             Divider(),
 
@@ -177,7 +167,7 @@ class _HomePageState extends State<HomePage> {
           ), //Padding
 
           //START OF HORIZONTAL LIST VIEW
-         // HorizontalList(),
+          // HorizontalList(),
           //PADDING WIDGET
           new Padding(
             padding: const EdgeInsets.fromLTRB(4.0, 5.0, 1.0, 5.0),
@@ -194,10 +184,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-void logout() async {
-  await googleSignIn.disconnect();
-  FirebaseAuth.instance.signOut();
-}
+  void logout() async {
+    await googleSignIn.disconnect();
+    FirebaseAuth.instance.signOut();
+  }
 }
 
 
@@ -226,14 +216,14 @@ class ProductsSearch extends SearchDelegate<Single_prod>{
 
   @override
   Widget buildSuggestions(BuildContext context) {
-   final mylist = query.isEmpty? loadProdItem() 
-       : loadProdItem().where((p)=> p.name.startsWith(query)).toList();
-   return mylist.isEmpty? Text("No Results Found...."): ListView.builder(
-       itemCount: mylist.length,
-       itemBuilder: (context, index){
-         final ProdItem fi = mylist[index];
-         return ListTile(title:Text(fi.name),);
-       });
+    final mylist = query.isEmpty? loadProdItem()
+        : loadProdItem().where((p)=> p.name.startsWith(query)).toList();
+    return mylist.isEmpty? Text("No Results Found...."): ListView.builder(
+        itemCount: mylist.length,
+        itemBuilder: (context, index){
+          final ProdItem fi = mylist[index];
+          return ListTile(title:Text(fi.name),);
+        });
   }
 
 }

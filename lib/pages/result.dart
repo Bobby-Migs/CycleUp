@@ -103,7 +103,9 @@ class Rental extends StatelessWidget {
                 ),
               ],
             ),
+            Spacer(),
             Divider(),
+
             Center(
               child: RaisedButton(
                 color: Colors.red,

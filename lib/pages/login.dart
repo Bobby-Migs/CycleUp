@@ -4,6 +4,7 @@ import 'package:cycle_up/provider/google_sign_in.dart';
 import 'package:cycle_up/widget/sign_up_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cycle_up/pages/home.dart';
+import 'package:cycle_up/Renter_Page/RentHome.dart';
 
 
 //trial
@@ -11,6 +12,16 @@ import 'package:cycle_up/widget/logged_in_widget.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatelessWidget {
+  final user = FirebaseAuth.instance.currentUser;
+  String accountType;
+  String adminEmail;
+  Login({
+    this.accountType,
+    this.adminEmail
+});
+  String type = 'admin';
+
+
   @override
   Widget build(BuildContext context) => Scaffold(
     body: ChangeNotifierProvider(
@@ -22,9 +33,16 @@ class Login extends StatelessWidget {
 
           if (provider.isSigningIn) {
             return buildLoading();
-          } else if (snapshot.hasData) {
+          } else if(snapshot.hasData && accountType=='lister'){
             return HomePage();
-          } else {
+          }else if(snapshot.hasData && accountType=='renter'){
+            return RentHomePage();
+          }
+          // else if (accountType=='admin' && adminEmail=='rionjumiguel@gmail.com'){
+          //   print(snapshot.data);
+          //   return RentHomePage();
+          // }
+          else {
             return SignUpWidget();
           }
         },
@@ -36,6 +54,7 @@ class Login extends StatelessWidget {
     fit: StackFit.expand,
     children: [
       Center(child: CircularProgressIndicator()),
+
     ],
   );
 }

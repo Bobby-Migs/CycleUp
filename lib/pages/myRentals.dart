@@ -10,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'imageModel.dart';
 import 'package:cycle_up/pages/home.dart';
+import 'package:get/get.dart';
 
 class Rentals extends StatefulWidget {
 
@@ -106,6 +107,48 @@ class _TestFormState extends State<TestForm> {
       });
 
     }
+  }
+
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  void main() => runApp(
+    MaterialApp(
+      //home: HomePage(),
+      navigatorKey: navigatorKey, // Setting a global key for navigator
+    ),
+  );
+   showMyDialog() {
+    showDialog(
+        context: (context),
+        builder: (context) => Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              color: Colors.white,
+              height: 250.0,
+              width: 300,
+              child: Column(
+                children: [
+                  Text("Terms and Conditions", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('We recommend that you prepare your bike at the best condition and deliver it at our store at your specified day of lending your bike. Rest assured that your bike will be returned with no damage, hence the borrower will be accountable for the repair and will be charge with additional fees.'
+                        'Please bring two valid ID with you when you come to our office.'),
+                  ),
+                  Spacer(),
+                  MaterialButton(
+                      child: Text('Agree', style: TextStyle(color: Colors.white),),
+                      color: Colors.red,
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
+                      })
+                ],
+              ),
+            ),
+          ),
+        )
+    );
   }
 
   @override
@@ -234,13 +277,15 @@ class _TestFormState extends State<TestForm> {
             ),
             ),
             onPressed: (){
+
               if (_formKey.currentState.validate()){
                 _formKey.currentState.save();
-
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
+               // Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
                 createProduct(imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks, model.features);
+                showMyDialog();
                 //updateUser();
               }
+
             },
           ),
           new Container(
