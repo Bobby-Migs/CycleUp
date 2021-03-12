@@ -114,7 +114,13 @@ class Rental extends StatelessWidget {
                         color: Colors.white
                     ),),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+                    //Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+                    //Navigator.popUntil(context, (Route<dynamic> predicate) => predicate.isFirst);
+                    //Navigator.popUntil(context, ModalRoute.withName('/HomePage'));
+                    //Navigator.of(context).pop(context);
+                    for(int x= 0; x < 5-1; x++ ){
+                      Navigator.of(context).pop(context);
+                    }
               }),
             )
 

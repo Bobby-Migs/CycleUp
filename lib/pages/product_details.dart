@@ -214,8 +214,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks, features, countId);
     }
 
-    Future createRentalList(String bikeName, int price, DateTime selectedDate) async {
-      await databaseManager().pushToRentals(bikeName, price, selectedDate, );
+    Future createRentalList(String userName, String userEmail,String bikeName, int price, DateTime selectedDate) async {
+      await databaseManager().pushToRentals(userName,userEmail,bikeName, price, selectedDate, );
     }
 
     return Scaffold(
@@ -223,7 +223,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         elevation: 0.1,
         backgroundColor: Colors.red,
         title: InkWell(
-            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));},
+            onTap: (){
+               //Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+              Navigator.of(context).pop(context);
+              },
             child: Text('Cycle Up')),
         actions: <Widget>[
           new IconButton(

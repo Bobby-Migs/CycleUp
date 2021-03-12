@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cycle_up/components/cart_products.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:cycle_up/components/horizontal_listview.dart';
 import 'package:flutter/material.dart';
@@ -221,8 +222,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks, features, countId);
     }
 
-    Future createRentalList(String bikeName, int price, DateTime selectedDate) async {
-      await databaseManager().pushToRentals(bikeName, price, selectedDate, );
+    Future createRentalList(String userName, String userEmail, String bikeName, int price, DateTime selectedDate) async {
+      await databaseManager().pushToRentals(userName, userEmail, bikeName, price, selectedDate, );
     }
 
     showMyDialog() {
@@ -259,7 +260,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      new Text("Bike Name:  ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red)),
+                                      new Text("Bike Name:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red),),
+                                    ],
+                                  ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
                                       new Text(widget.prod_detail_name,  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0)),
                                     ],
                                   ),
@@ -313,7 +319,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     setState(() {
                                       pressed = true;
                                     });
-                                    createRentalList(widget.prod_detail_name,finalTotal,selectedDate);
+                                    createRentalList(user.displayName.toString(), user.email.toString(),widget.prod_detail_name,finalTotal,selectedDate);
                                     SendMail();
 
                                   },
@@ -347,7 +353,10 @@ class _ProductDetailsState extends State<ProductDetails> {
         elevation: 0.1,
         backgroundColor: Colors.red,
         title: InkWell(
-            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));},
+            onTap: (){
+              //Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+              Navigator.of(context).pop(context);
+              },
             child: Text('Cycle Up')),
         actions: <Widget>[
           new IconButton(

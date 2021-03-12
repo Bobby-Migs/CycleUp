@@ -1,3 +1,4 @@
+import 'package:cycle_up/pages/product_details.dart';
 import 'package:cycle_up/provider/google_sign_in.dart';
 import 'package:cycle_up/widget/sign_up_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   final googleSignIn = GoogleSignIn();
   @override
   Widget build(BuildContext context) {
+
     Widget imageCarousel = new Container(
       height: 200.0,
       child: new Carousel(
@@ -49,7 +51,14 @@ class _HomePageState extends State<HomePage> {
       appBar: new AppBar(
         elevation: 0.2,
         backgroundColor: Colors.red,
-        title: Text('Cycle Up'),
+        title: InkWell(
+            onTap: (){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => super.widget));
+            },
+            child: Text('Cycle Up')),
         actions: <Widget>[
           new IconButton(
               icon: Icon(
@@ -61,11 +70,13 @@ class _HomePageState extends State<HomePage> {
               }),
           // new IconButton(
           //     icon: Icon(
-          //       Icons.shopping_cart,
+          //       Icons.logout,
           //       color: Colors.white,
           //     ),
           //     onPressed: () {
-          //       Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
+          //       final provider =
+          //       Provider.of<GoogleSignInProvider>(context, listen: false);
+          //       provider.logout();
           //     })
         ],
       ),
@@ -93,7 +104,15 @@ class _HomePageState extends State<HomePage> {
 
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+                //Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+                Navigator.of(context).pop(context);
+               // Navigator.popUntil(context, ModalRoute.withName('/HomePage'));
+               //  Navigator.of(context).push(
+               //    MaterialPageRoute(
+               //      settings: RouteSettings(name: "/HomePage"),
+               //      builder: (context) => HomePage(),
+               //    ),
+               //  );
               },
               child: ListTile(
                 title: Text('Home Page'),
@@ -140,7 +159,8 @@ class _HomePageState extends State<HomePage> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+              },
               child: ListTile(
                 title: Text('About'),
                 leading: Icon(Icons.help),
@@ -149,8 +169,6 @@ class _HomePageState extends State<HomePage> {
 
             InkWell(
               onTap: () {
-
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=> new SignUpWidget()));
                 final provider =
                 Provider.of<GoogleSignInProvider>(context, listen: false);
                 provider.logout();

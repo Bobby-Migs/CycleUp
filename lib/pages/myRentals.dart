@@ -12,6 +12,7 @@ import 'imageModel.dart';
 import 'package:cycle_up/pages/home.dart';
 import 'package:get/get.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
 class Rentals extends StatefulWidget {
 
   @override
@@ -20,6 +21,7 @@ class Rentals extends StatefulWidget {
 
 class _RentalsState extends State<Rentals> {
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +29,10 @@ class _RentalsState extends State<Rentals> {
           elevation: 0.2,
           backgroundColor: Colors.red,
           title: InkWell(
-              onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));},
+              onTap: (){
+                //Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+                Navigator.of(context).pop(context);
+                },
               child: Text('Cycle Up')),
           actions: <Widget>[
             new IconButton(
@@ -74,6 +79,7 @@ class TestForm extends StatefulWidget {
 class _TestFormState extends State<TestForm> {
   File fileMedia;
   String imgUrl= "";
+  final user = FirebaseAuth.instance.currentUser;
 
   final _formKey = GlobalKey<FormState>();
   RentalOutput model = RentalOutput();
@@ -155,8 +161,8 @@ class _TestFormState extends State<TestForm> {
   Widget build(BuildContext context) {
     final halfMediaWidth = MediaQuery.of(context).size.width /2.10;
 
-    Future createProduct(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
-      await databaseManager().createUserData(_image, bikeName, price, frameset, fork, cranks, features);
+    Future createProduct(String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
+      await databaseManager().createUserData(userName, userEmail, _image, bikeName, price, frameset, fork, cranks, features);
     }
 
     return Form(
@@ -281,7 +287,7 @@ class _TestFormState extends State<TestForm> {
               if (_formKey.currentState.validate()){
                 _formKey.currentState.save();
                // Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
-                createProduct(imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks, model.features);
+                createProduct(user.displayName.toString(), user.email.toString(), imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks, model.features);
                 showMyDialog();
                 //updateUser();
               }

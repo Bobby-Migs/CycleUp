@@ -20,11 +20,6 @@ class GoogleSignupButtonWidget extends StatelessWidget {
       textColor: Colors.white,
       icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
       onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => ChooseAccount()),
-        // );
-
         final provider =
         Provider.of<GoogleSignInProvider>(context, listen: false);
         provider.login();

@@ -1,5 +1,5 @@
+import 'package:cycle_up/Admin/dashboard.dart';
 import 'package:flutter/material.dart';
-
 import 'package:cycle_up/provider/google_sign_in.dart';
 import 'package:cycle_up/widget/sign_up_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,16 +11,24 @@ import 'package:cycle_up/Renter_Page/RentHome.dart';
 import 'package:cycle_up/widget/logged_in_widget.dart';
 import 'package:provider/provider.dart';
 
-class Login extends StatelessWidget {
-  final user = FirebaseAuth.instance.currentUser;
+class Login extends StatefulWidget {
   String accountType;
   String adminEmail;
+  String adminPass;
   Login({
     this.accountType,
-    this.adminEmail
+    this.adminEmail,
+    this.adminPass
 });
-  String type = 'admin';
 
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final user = FirebaseAuth.instance.currentUser;
+
+  String type = 'admin';
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -33,16 +41,14 @@ class Login extends StatelessWidget {
 
           if (provider.isSigningIn) {
             return buildLoading();
-          } else if(snapshot.hasData && accountType=='lister'){
+          } else if(snapshot.hasData && widget.accountType=='lister'){
             return HomePage();
-          }else if(snapshot.hasData && accountType=='renter'){
+          }else if(snapshot.hasData && widget.accountType=='renter'){
             return RentHomePage();
-          }
-          // else if (accountType=='admin' && adminEmail=='rionjumiguel@gmail.com'){
-          //   print(snapshot.data);
-          //   return RentHomePage();
-          // }
-          else {
+          } else if (snapshot.hasData && widget.accountType=='admin' && widget.adminPass == 'admin'){
+            //print(widget.adminPass);
+            return MyDashBoard();
+          } else {
             return SignUpWidget();
           }
         },
@@ -58,6 +64,8 @@ class Login extends StatelessWidget {
     ],
   );
 }
+
+
 
 
 

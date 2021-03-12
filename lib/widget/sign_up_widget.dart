@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:cycle_up/widget/google_signup_button_widget.dart';
 import 'package:cycle_up/widget/background_painter.dart';
 import 'package:cycle_up/pages/login.dart';
-import 'package:cycle_up/Admin/adminLogin.dart';
 
 class SignUpWidget extends StatefulWidget {
   @override
@@ -14,7 +13,71 @@ class SignUpWidget extends StatefulWidget {
 
 class _SignUpWidgetState extends State<SignUpWidget> {
   String accountValue;
+  String adminPass;
+  final myController = TextEditingController();
+  final navigatorKey = GlobalKey<NavigatorState>();
 
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController.dispose();
+    super.dispose();
+  }
+
+  void main() => runApp(
+    MaterialApp(
+      //home: HomePage(),
+      navigatorKey: navigatorKey, // Setting a global key for navigator
+    ),
+  );
+  showMyDialog() {
+    showDialog(
+        context: (context),
+        builder: (context) => Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              color: Colors.white,
+              height: 250.0,
+              width: 300,
+              child: Column(
+                children: [
+                  Spacer(),
+                  Text("Enter Admin Password", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: TextField(
+                      obscureText: true,
+                      controller: myController,
+                    ),
+                  ),
+                  Spacer(),
+                  MaterialButton(
+                      child: Text('Continue', style: TextStyle(color: Colors.white),),
+                      color: Colors.red,
+                      onPressed: (){
+                        adminPass=myController.text.toString();
+                        //print(myController.text.toString());
+                        if(adminPass=='admin'){
+                          Navigator.of(context).pop(context);
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Login(accountType: accountValue,adminPass: adminPass,)));
+
+                        }else{
+                          Navigator.of(context).pop(context);
+                        }
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
+                      })
+                ],
+              ),
+            ),
+          ),
+        )
+    );
+  }
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SHOW DIALOG FOR ADMIN >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   @override
   Widget build(BuildContext context) => Stack(
     fit: StackFit.expand,
@@ -92,20 +155,25 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   child: Text("List a bike"),
                 ),
               ),
-              // DropdownMenuItem<String>(
-              //   value: "admin",
-              //   child: Center(
-              //     child: Text("admin"),
-              //   ),
-              // ),
+              DropdownMenuItem<String>(
+                value: "admin",
+                child: Center(
+                  child: Text("admin"),
+                ),
+              ),
             ],
 
             onChanged: (_value) => {
               print(_value.toString()),
               setState((){
                 accountValue = _value;
-                //Login().getAccountType(accountValue);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Login(accountType: accountValue,)));
+                if(accountValue=='admin'){
+                  showMyDialog();
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => Login(adminPass: 'admin',)));
+                }else{
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Login(accountType: accountValue)));
+                }
+
               }),
             },
 

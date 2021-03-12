@@ -30,7 +30,10 @@ class _CartState extends State<Cart> {
         elevation: 0.2,
         backgroundColor: Colors.red,
         title: InkWell(
-            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));},
+            onTap: (){
+              //Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
+              Navigator.of(context).pop(context);
+            },
             child: Text('Cart')),
         actions: <Widget>[
           new IconButton(

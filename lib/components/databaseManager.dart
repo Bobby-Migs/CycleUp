@@ -15,12 +15,11 @@ class databaseManager {
 
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PUSHING DATA TO PRODUCT LIST >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   Future<void> createUserData(
-      String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
+      String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
     return await productlist.doc()
-        .set({'picture': _image, 'bikeName': bikeName, 'price': price, 'frameset': frameset, 'fork': fork, 'cranks': cranks, 'features':features})
+        .set({'userName': userName, 'userEmail':userEmail, 'picture': _image, 'bikeName': bikeName, 'price': price, 'frameset': frameset, 'fork': fork, 'cranks': cranks, 'features':features})
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
-
   }
 // <<<<<<<<<<<<<<<<<<<<<<<< PUHING DATA TO CART >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   Future<void> pushToCart(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String ID) async {
@@ -31,9 +30,9 @@ class databaseManager {
   }
 
   // <<<<<<<<<<<<<<<<<<<<<<<< PUHING DATA TO RENTAL LIST >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  Future<void> pushToRentals(String bikeName, int price, DateTime selectedDated) async {
+  Future<void> pushToRentals(String userName, String userEmail,String bikeName, int price, DateTime selectedDated) async {
     return await rentalList.doc()
-        .set({'bikeName': bikeName, 'price': price, 'selectedDate': selectedDated,})
+        .set({'userName': userName, 'userEmail':userEmail, 'bikeName': bikeName, 'price': price, 'selectedDate': selectedDated,})
         .then((value) => print('item is rented'))
         .catchError((error) => print("Failed to add user: $error"));
   }

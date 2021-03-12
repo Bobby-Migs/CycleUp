@@ -93,7 +93,8 @@ class _RentHomePageState extends State<RentHomePage> {
 
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> new RentHomePage()));
+                //Navigator.push(context, MaterialPageRoute(builder: (context)=> new RentHomePage()));
+                Navigator.of(context).pop(context);
               },
               child: ListTile(
                 title: Text('Home Page'),
@@ -111,7 +112,8 @@ class _RentHomePageState extends State<RentHomePage> {
 
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
+                //Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
+                Navigator.of(context).pop(context);
               },
               child: ListTile(
                 title: Text('My Cart'),
