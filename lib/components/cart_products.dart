@@ -50,6 +50,9 @@ class _Cart_productsState extends State<Cart_products> {
             cart_prod_cranks: userCartList[index]["cranks"],
             cart_prod_feature: userCartList[index]["features"],
             ctrId: userCartList[index]["cartID"],
+            ownerEmail: userCartList[index]["ownerEmail"],
+            user_Name: userCartList[index]['ownerName'],
+
           );
         });
   }
@@ -66,7 +69,8 @@ class Single_cart_product extends StatelessWidget {
   final cart_prod_cranks;
   final cart_prod_feature;
   final ctrId;
-
+  final ownerEmail;
+  final user_Name;
   Single_cart_product(
       {this.cart_prod_name,
       this.cart_prod_picture,
@@ -75,7 +79,9 @@ class Single_cart_product extends StatelessWidget {
       this.cart_prod_fork,
       this.cart_prod_cranks,
       this.cart_prod_feature,
-      this.ctrId
+      this.ctrId,
+        this.ownerEmail,
+        this.user_Name
       });
 
   // String cartID;
@@ -98,6 +104,8 @@ class Single_cart_product extends StatelessWidget {
           prod_detail_fork: cart_prod_fork,
           cart_id: ctrId.toString(),
           prod_detail_features: cart_prod_feature,
+          ownerEmail: ownerEmail,
+          user_Name: user_Name,
 
         ),
       )),

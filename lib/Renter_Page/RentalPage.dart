@@ -237,8 +237,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
 
-    Future createCartList(String ownerName,String borrowerEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
-      await databaseManager().pushToCart(ownerName, borrowerEmail, _image, bikeName, price, frameset, fork, cranks, features, countId);
+    Future createCartList(String ownerName,String borrowerEmail,String ownerEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
+      await databaseManager().pushToCart(ownerName, borrowerEmail,ownerEmail, _image, bikeName, price, frameset, fork, cranks, features, countId);
     }
 
     Future createRentalList(String image, String ownerName, String userName, String userEmail, String contNum, String address, String bikeName, int price, DateTime selectedDate, int days, String type, String ID) async {
@@ -668,7 +668,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                     // Single_cart_product().getCartId(countId);
                     //Single_cart_product(ctrId: countId.toString(),);
-                    createCartList(widget.user_Name, user.email.toString(),widget.prod_detail_picture, widget.prod_detail_name, widget.prod_detail_new_price, widget.prod_detail_frameset,
+                    createCartList(widget.user_Name, user.email.toString(), widget.ownerEmail,widget.prod_detail_picture, widget.prod_detail_name, widget.prod_detail_new_price, widget.prod_detail_frameset,
                         widget.prod_detail_fork, widget.prod_detail_cranks, widget.prod_detail_features,countId);
 
 

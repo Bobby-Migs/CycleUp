@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cycle_up/pages/home.dart';
 import 'package:cycle_up/components/cart_products.dart';
+import 'package:cycle_up/Renter_Page/RentHome.dart';
 
 class Cart extends StatefulWidget {
   final cart_detail_name;
@@ -31,19 +32,19 @@ class _CartState extends State<Cart> {
         backgroundColor: Colors.red,
         title: InkWell(
             onTap: (){
-              //Navigator.push(context, MaterialPageRoute(builder: (context)=> new HomePage()));
-              Navigator.of(context).pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> new RentHomePage()));
+
             },
             child: Text('Cart')),
         actions: <Widget>[
           new IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {}),
-
+            icon: new Icon(Icons.close),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> RentHomePage()));
+            },
+          ),
         ],
+        leading: new Container(),
       ),
 
       body: new Cart_products(),

@@ -55,6 +55,7 @@ class _Carts_productsState extends State<Carts_products> {
             prod_detail_fork: userProductList[index]['fork'],
             prod_detail_cranks: userProductList[index]['cranks'],
             user_Name: userProductList[index]['userName'],
+            ownerEmail: userProductList[index]['userEmail'],
           );
         });
   }
@@ -76,6 +77,7 @@ class ProductDetails extends StatefulWidget {
   final prod_detail_fork;
   final cart_id;
   final user_Name;
+  final ownerEmail;
 
   ProductDetails({
     this.prod_detail_name,
@@ -90,6 +92,7 @@ class ProductDetails extends StatefulWidget {
     this.prod_detail_fork,
     this.cart_id,
     this.user_Name,
+    this.ownerEmail,
   });
 
   @override

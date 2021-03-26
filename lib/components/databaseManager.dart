@@ -37,9 +37,9 @@ class databaseManager {
         .catchError((error) => print("Failed to add product: $error"));
   }
 // <<<<<<<<<<<<<<<<<<<<<<<< PUHING DATA TO CART >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  Future<void> pushToCart(String ownerName, String borrowerEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String ID) async {
+  Future<void> pushToCart(String ownerName, String borrowerEmail, String ownerEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String ID) async {
     return await cartList.doc(ID)
-        .set({'ownerName': ownerName, 'borrowerEmail':borrowerEmail, 'picture': _image, 'bikeName': bikeName, 'price': price, 'frameset': frameset, 'fork': fork, 'cranks': cranks, 'features':features, 'cartID': ID})
+        .set({'ownerName': ownerName, 'borrowerEmail':borrowerEmail,'ownerEmail':ownerEmail, 'picture': _image, 'bikeName': bikeName, 'price': price, 'frameset': frameset, 'fork': fork, 'cranks': cranks, 'features':features, 'cartID': ID})
         .then((value) => print('item added to cart'))
         .catchError((error) => print("Failed to add to cart: $error"));
   }

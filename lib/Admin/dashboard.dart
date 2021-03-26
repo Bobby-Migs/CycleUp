@@ -95,16 +95,16 @@ class _MyDashBoardState extends State<MyDashBoard> {
                 leading: Icon(Icons.directions_bike, color: Colors.red),
               ),
             ),
-
-            InkWell(
-              onTap: () {
-               // Navigator.push(context, MaterialPageRoute(builder: (context)=> new Rentals()));
-              },
-              child: ListTile(
-                title: Text('User Accounts'),
-                leading: Icon(Icons.account_circle_rounded, color: Colors.red),
-              ),
-            ),
+            //
+            // InkWell(
+            //   onTap: () {
+            //    // Navigator.push(context, MaterialPageRoute(builder: (context)=> new Rentals()));
+            //   },
+            //   child: ListTile(
+            //     title: Text('User Accounts'),
+            //     leading: Icon(Icons.account_circle_rounded, color: Colors.red),
+            //   ),
+            // ),
 
             InkWell(
               onTap: () {
