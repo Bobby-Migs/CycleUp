@@ -98,6 +98,7 @@ class ProductDetails extends StatefulWidget {
 
 
 class _ProductDetailsState extends State<ProductDetails> {
+  final nameHolder = TextEditingController();
   final user = FirebaseAuth.instance.currentUser;
   bool _isButtonDisabled = false;
   String dropdownValueTwo = '';
@@ -187,8 +188,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   int totalRentType=0;
   int finalTotal = 0;
 
-
-
   // DATE VARIABLE
   DateTime selectedDate = DateTime.now();
   final f = new DateFormat('yyyy-MM-dd');
@@ -196,8 +195,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   final myController = TextEditingController();
   bool pressed = false;
   String countId = FirebaseFirestore.instance.collection("cartItems").doc().id;
-
-
 
 
   //<<<<<< OVERRIDE FOR HOURS >>>>>>
@@ -208,18 +205,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
-    // Future createCartList(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
-    //   await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks, features, countId);
-    // }
-
-    // Future createRentalList(String userName, String userEmail, String contNum, String address, String bikeName, int price, DateTime selectedDate) async {
-    //   await databaseManager().pushToRentals(userName,userEmail,contNum, address, bikeName, price, selectedDate, );
-    // }
 
     return Scaffold(
       appBar: new AppBar(
@@ -232,12 +219,12 @@ class _ProductDetailsState extends State<ProductDetails> {
               },
             child: Text('Cycle Up')),
         actions: <Widget>[
-          new IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {}),
+          // new IconButton(
+          //     icon: Icon(
+          //       Icons.search,
+          //       color: Colors.white,
+          //     ),
+          //     onPressed: () {}),
         ],
       ),
 
@@ -327,11 +314,20 @@ class _ProductDetailsState extends State<ProductDetails> {
           //   child: new Text("Similar Bikes"),
           // ),
           //SIMILAR PRODUCTS SECTION
-          Container(
-            height: 70.0,
-            child:Text('Comments'),
-            //Similar_products(),
-          ),
+          // Container(
+          //   height: 70.0,
+          //   child:Text('Comments'),
+          //   //Similar_products(),
+          // ),
+          // Container(
+          //     width: 280,
+          //     padding: EdgeInsets.all(10.0),
+          //     child: TextField(
+          //       controller: nameHolder,
+          //       autocorrect: true,
+          //       decoration: InputDecoration(hintText: 'Enter Your Name Here'),
+          //     )
+          // ),
 
 
         ],

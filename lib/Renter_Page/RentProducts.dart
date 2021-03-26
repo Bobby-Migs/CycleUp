@@ -52,6 +52,7 @@ class _ProductsState extends State<Products> {
             prod_fork: userProductList[index]['fork'],
             prod_features: userProductList[index]['features'],
             user_Name: userProductList[index]['userName'],
+            ownerEmail: userProductList[index]['userEmail'],
 
           );
         });
@@ -69,6 +70,7 @@ class Single_prod extends StatelessWidget {
   final prod_fork;
   final prod_features;
   final user_Name;
+  final ownerEmail;
 
   Single_prod(
       {this.prod_name,
@@ -80,6 +82,7 @@ class Single_prod extends StatelessWidget {
         this.prod_fork,
         this.prod_features,
         this.user_Name,
+        this.ownerEmail,
       });
 
   @override
@@ -100,6 +103,8 @@ class Single_prod extends StatelessWidget {
                   prod_detail_fork: prod_fork,
                   prod_detail_features: prod_features,
                   user_Name: user_Name,
+                  ownerEmail: ownerEmail,
+
 
 
                 ),
@@ -125,38 +130,4 @@ class Single_prod extends StatelessWidget {
   }
 
 }
-
-class ProdItem{
-
-  final String name;
-  final String category;
-  ProdItem({
-    this.name,
-    this.category,
-  });
-}
-List<ProdItem> loadProdItem(){
-
-
-  var fi = <ProdItem>[
-    ProdItem(
-      name: "SD AM",
-      category: "BMX",
-    ),
-    ProdItem(
-      name: "Cantina",
-      category: "Road bike",
-    ),
-    ProdItem(
-      name: "Leucadia",
-      category: "BMX",
-    ),
-    ProdItem(
-      name: "Shredder_18",
-      category: "road bike",
-    ),
-  ];
-  return fi;
-}
-
 

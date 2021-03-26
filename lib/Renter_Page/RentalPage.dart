@@ -58,6 +58,8 @@ class _Carts_productsState extends State<Carts_products> {
             prod_detail_fork: userProductList[index]['fork'],
             prod_detail_cranks: userProductList[index]['cranks'],
             user_Name: userProductList[index]['userName'],
+            ownerEmail: userProductList[index]['userEmail'],
+
           );
         });
   }
@@ -80,6 +82,7 @@ class ProductDetails extends StatefulWidget {
   final prod_detail_fork;
   final cart_id;
   final user_Name;
+  final ownerEmail;
 
   ProductDetails({
     this.prod_detail_name,
@@ -94,6 +97,7 @@ class ProductDetails extends StatefulWidget {
     this.prod_detail_fork,
     this.cart_id,
     this.user_Name,
+    this.ownerEmail
   });
 
   @override
@@ -409,12 +413,13 @@ class _ProductDetailsState extends State<ProductDetails> {
               },
             child: Text('Cycle Up')),
         actions: <Widget>[
-          new IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {}),
+          // new IconButton(
+          //     icon: Icon(
+          //       Icons.search,
+          //       color: Colors.white,
+          //     ),
+          //     onPressed: () {}
+          //     ),
         ],
       ),
 
@@ -673,7 +678,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Center(
                 child: new IconButton(
-                    icon: Icon(Icons.message),
+                    icon: Icon(Icons.favorite_border),
                     color: Colors.red,
                     onPressed: () {
                       // MyChatHomePage();
@@ -689,7 +694,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Text('Owner: '+widget.user_Name),
+            child: new Text('Owner: '+widget.user_Name+"\n"+"Email: "+widget.ownerEmail),
           ),
 
           Divider(),

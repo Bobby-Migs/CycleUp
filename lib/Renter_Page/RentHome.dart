@@ -49,14 +49,14 @@ class _RentHomePageState extends State<RentHomePage> {
         backgroundColor: Colors.red,
         title: Text('Cycle Up'),
         actions: <Widget>[
-          new IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                showSearch(context: context, delegate: ProductsSearch());
-              }),
+          // new IconButton(
+          //     icon: Icon(
+          //       Icons.search,
+          //       color: Colors.white,
+          //     ),
+          //     onPressed: () {
+          //       showSearch(context: context, delegate: ProductsSearch());
+          //     }),
           new IconButton(
               icon: Icon(
                 Icons.shopping_cart,
@@ -193,39 +193,3 @@ class _RentHomePageState extends State<RentHomePage> {
   }
 }
 
-
-class ProductsSearch extends SearchDelegate<Single_prod>{
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [IconButton(icon: Icon(Icons.clear), onPressed: (){
-      query="";
-    },)];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(onPressed: (){
-      close(context, null);
-    }, icon: Icon(Icons.arrow_back),);
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    return null;
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final mylist = query.isEmpty? loadProdItem()
-        : loadProdItem().where((p)=> p.name.startsWith(query)).toList();
-    return mylist.isEmpty? Text("No Results Found...."): ListView.builder(
-        itemCount: mylist.length,
-        itemBuilder: (context, index){
-          final ProdItem fi = mylist[index];
-          return ListTile(title:Text(fi.name),);
-        });
-  }
-
-}
