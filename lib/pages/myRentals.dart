@@ -48,7 +48,7 @@ class _RentalsState extends State<Rentals> {
         body: new ListView(
             children: <Widget>[
               Container(
-                height: 800.0,
+                height:950.0,
                child: Card(
                  child: Column(
                    mainAxisAlignment: MainAxisAlignment.start,
@@ -56,7 +56,6 @@ class _RentalsState extends State<Rentals> {
                      Container(
                      ),
                      Container(
-
                          child: new TestForm()),
                    ],
                  ),
@@ -140,7 +139,7 @@ class _TestFormState extends State<TestForm> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text('We recommend that you prepare your bike at the best condition and deliver it at our store at your specified day of lending your bike. Rest assured that your bike will be returned with no damage, hence the borrower will be accountable for the repair and will be charge with additional fees.'
-                        'Please bring two valid ID with you when you come to our office.'),
+                        'Please bring any two valid ID with you when you come to our office.'),
                   ),
                   Spacer(),
                   MaterialButton(
@@ -161,9 +160,10 @@ class _TestFormState extends State<TestForm> {
   Widget build(BuildContext context) {
     final halfMediaWidth = MediaQuery.of(context).size.width /2.10;
 
-    Future createProduct(String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
-      await databaseManager().createUserData(userName, userEmail, _image, bikeName, price, frameset, fork, cranks, features);
+    Future createProduct(String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String ID) async {
+      await databaseManager().createUserData(userName, userEmail, _image, bikeName, price, frameset, fork, cranks, features, ID);
     }
+    String listingID = FirebaseFirestore.instance.collection("productlistInfo").doc().id;
 
     return Form(
       key: _formKey,
@@ -275,6 +275,50 @@ class _TestFormState extends State<TestForm> {
                 model.features = value;
               },
             ),
+          Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 15)),
+          Divider(),
+          Padding(padding: EdgeInsets.fromLTRB(0, 15, 0, 15)),
+          Text('Fill Up User Information', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 10)),
+          MyTextFormField(
+            hintText: 'Full Name',
+            validator: (String value){
+              if (value.isEmpty){
+                return 'Enter Full Name';
+              }
+              _formKey.currentState.save();
+              return null;
+            },
+            onSaved: (String value){
+              model.ownerName = value;
+            },
+          ),
+          MyTextFormField(
+            hintText: 'Address',
+            validator: (String value){
+              if (value.isEmpty){
+                return 'Enter Address';
+              }
+              _formKey.currentState.save();
+              return null;
+            },
+            onSaved: (String value){
+              model.address = value;
+            },
+          ),
+          MyTextFormField(
+            hintText: 'Contact Number',
+            validator: (String value){
+              if (value.isEmpty){
+                return 'Enter Contact Number';
+              }
+              _formKey.currentState.save();
+              return null;
+            },
+            onSaved: (String value){
+              model.contNum = value;
+            },
+          ),
           RaisedButton(
             color: Colors.red,
             child: Text('Submit',
@@ -283,15 +327,13 @@ class _TestFormState extends State<TestForm> {
             ),
             ),
             onPressed: (){
-
               if (_formKey.currentState.validate()){
                 _formKey.currentState.save();
                // Navigator.push(context, MaterialPageRoute(builder: (context) => Rental(model: this.model,)));
-                createProduct(user.displayName.toString(), user.email.toString(), imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks, model.features);
+                createProduct(user.displayName.toString(), user.email.toString(), imgUrl, model.bikeName, model.price, model.frameset, model.fork, model.cranks, model.features, listingID);
                 showMyDialog();
                 //updateUser();
               }
-
             },
           ),
           new Container(

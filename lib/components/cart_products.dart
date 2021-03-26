@@ -38,8 +38,6 @@ class _Cart_productsState extends State<Cart_products> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return new ListView.builder(
         itemCount: userCartList.length,
         itemBuilder: (context, index) {

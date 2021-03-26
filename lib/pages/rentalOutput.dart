@@ -9,6 +9,9 @@ class RentalOutput {
   String fork;
   String cranks;
   String features;
+  String ownerName;
+  String address;
+  String contNum;
   File img;
 
   RentalOutput({
@@ -18,6 +21,9 @@ class RentalOutput {
     this.fork,
     this.cranks,
     this.features,
-    this.img
+    this.img,
+    this.ownerName,
+    this.address,
+    this.contNum
 });
 }

@@ -12,6 +12,8 @@ import 'package:cycle_up/components/databaseManager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cycle_up/components/sendMail.dart';
 
+import 'package:flutter/material.dart';
+
 import '../components/cart_products.dart';
 
 class Carts_products extends StatefulWidget {
@@ -55,6 +57,7 @@ class _Carts_productsState extends State<Carts_products> {
             prod_detail_frameset: userProductList[index]['frameset'],
             prod_detail_fork: userProductList[index]['fork'],
             prod_detail_cranks: userProductList[index]['cranks'],
+            user_Name: userProductList[index]['userName'],
           );
         });
   }
@@ -63,6 +66,7 @@ class _Carts_productsState extends State<Carts_products> {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 class ProductDetails extends StatefulWidget {
+
 
   final prod_detail_name;
   final prod_detail_new_price;
@@ -75,6 +79,7 @@ class ProductDetails extends StatefulWidget {
   final prod_type;
   final prod_detail_fork;
   final cart_id;
+  final user_Name;
 
   ProductDetails({
     this.prod_detail_name,
@@ -87,7 +92,8 @@ class ProductDetails extends StatefulWidget {
     this.prod_detail_date,
     this.prod_type,
     this.prod_detail_fork,
-    this.cart_id
+    this.cart_id,
+    this.user_Name,
   });
 
   @override
@@ -102,6 +108,9 @@ class _ProductDetailsState extends State<ProductDetails> {
   String dropdownValue = '';
   String textValue='';
   int numValue=0;
+  String borrowerName;
+  String borrowerContactNum;
+  String borrowerAddress;
 
   bool disabledropdown = true;
   List<DropdownMenuItem<String>> menuitems = List();
@@ -191,9 +200,13 @@ class _ProductDetailsState extends State<ProductDetails> {
   DateTime selectedDate = DateTime.now();
   final f = new DateFormat('yyyy-MM-dd');
   // HOURS VARIABLE
+
   final myController = TextEditingController();
+  final contactNum = TextEditingController();
+  final address = TextEditingController();
   bool pressed = false;
   String countId = FirebaseFirestore.instance.collection("cartItems").doc().id;
+  String borrowerID = FirebaseFirestore.instance.collection("RentalList").doc().id;
 
 
   final navigatorKey = GlobalKey<NavigatorState>();
@@ -210,6 +223,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     myController.dispose();
+    contactNum.dispose();
+    address.dispose();
     super.dispose();
   }
 
@@ -218,128 +233,163 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
 
-    Future createCartList(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
-      await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks, features, countId);
+    Future createCartList(String ownerName,String borrowerEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
+      await databaseManager().pushToCart(ownerName, borrowerEmail, _image, bikeName, price, frameset, fork, cranks, features, countId);
     }
 
-    Future createRentalList(String userName, String userEmail, String bikeName, int price, DateTime selectedDate) async {
-      await databaseManager().pushToRentals(userName, userEmail, bikeName, price, selectedDate, );
+    Future createRentalList(String image, String ownerName, String userName, String userEmail, String contNum, String address, String bikeName, int price, DateTime selectedDate, int days, String type, String ID) async {
+      await databaseManager().pushToRentals(image, ownerName, userName, userEmail, contNum, address, bikeName, price, selectedDate, days, type, ID );
     }
 
     showMyDialog() {
       showDialog(
           context: (context),
           builder: (context) => Center(
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                color: Colors.white,
-                height: 500.0,
-                width: 300,
-                child: Column(
-                  children: [
-                    Text("Collateral Agreement", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Participant agrees to return the bike in clean, undamaged condition to avoid any additional charges for repair, maintenance or replacement. Participant accepts use of the equipment, AS IS, in reasonably good condition and accepts full responsibility for care of the equipment while under his/her possession. Damaged parts or components will be repaired/replaced at the shop’s discretion and Participant agrees to pay regular shop rates and retail prices for components replaced. Clean condition means normal wear and tear is accepted but does not include broken spokes, rims, bent rims, damaged frames, handlebars, seats or other parts from misuse and/or crashes. Note: All bikes should be returned clean of mud and debris. Any bike not returned clean may be assessed an additional cleaning fee at WRFI’s discretion. Participants credit card will be details will be collected at time of bike rental.'),
-                    ),
-                    Spacer(),
-                    MaterialButton(
-                        child: Text('Agree', style: TextStyle(color: Colors.white),),
-                        color: Colors.red,
-                        onPressed: (){
-                          Navigator.of(context).pop(context);
-                          showDialog(context: context, builder: (context) {
-                            return new AlertDialog(
-                              title: new Text("Rental Details"),
-                              content: Column(
-                                children: [
-                                  Image.network(widget.prod_detail_picture, height: 200,),
-                                  Divider(indent: 1.0,color: Colors.white),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      new Text("Bike Name:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red),),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      new Text(widget.prod_detail_name,  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0)),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      new Text("Bike Price:  ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red)),
-                                      new Text(widget.prod_detail_new_price.toString(),  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0)),
-                                    ],
-                                  ),
-                                  Divider(),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      new Text("Date:  ", style: TextStyle(fontWeight: FontWeight.bold)),
-                                      new Text(f.format(selectedDate)),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      new Text("$textValue:  ", style: TextStyle(fontWeight: FontWeight.bold)),
-                                      new Text(getHrDay.toString()),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      new Text("Quantity: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                                      new Text(dropdownValueTwo.toString()),
-                                    ],
-                                  ),
-                                  Divider(indent: 1.0,color: Colors.white),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      new Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-                                      new Text('$finalTotal'),
-                                    ],
-                                  ),
-                                ],
-                              ),
+            child: SingleChildScrollView(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  color: Colors.white,
+                  height: 900.0,
+                  width: 300,
+                  margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                  child: Column(
+                    children: [
+                      Spacer(),
+                      Text('Fill Up Form', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                        child: TextField(
+                          controller: myController,
+                          decoration: InputDecoration(
+                            hintText: user.displayName
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                        child: TextField(
+                          controller: contactNum,
+                          decoration: InputDecoration(
+                              hintText: "Contact Number"
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                        child: TextField(
+                          controller: address,
+                          decoration: InputDecoration(
+                              hintText: "Address"
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      Text("Collateral Agreement", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
 
-                              actions: <Widget>[
-
-                                new MaterialButton(
-
-                                  onPressed: (){
-
-                                    Navigator.of(context).pop(context);
-                                    setState(() {
-                                      pressed = true;
-                                    });
-                                    createRentalList(user.displayName.toString(), user.email.toString(),widget.prod_detail_name,finalTotal,selectedDate);
-                                    SendMail();
-
-                                  },
-                                  child: new Text("              Rent Now              "),
-                                  minWidth: 60,
-                                  color: Colors.red,
-                                  textColor: Colors.white,
-                                  elevation: 0.2,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        child: Text('Participant agrees to return the bike in clean, undamaged condition to avoid any additional charges for repair, maintenance or replacement. Participant accepts use of the equipment, AS IS, in reasonably good condition and accepts full responsibility for care of the equipment while under his/her possession. Damaged parts or components will be repaired/replaced at the shop’s discretion and Participant agrees to pay regular shop rates and retail prices for components replaced. Clean condition means normal wear and tear is accepted but does not include broken spokes, rims, bent rims, damaged frames, handlebars, seats or other parts from misuse and/or crashes. Note: All bikes should be returned clean of mud and debris. Any bike not returned clean may be assessed an additional cleaning fee at WRFI’s discretion. Participants credit card will be details will be collected at time of bike rental.', textAlign: TextAlign.justify,),
+                      ),
+                      Spacer(),
+                      MaterialButton(
+                          child: Text('Agree', style: TextStyle(color: Colors.white),),
+                          color: Colors.red,
+                          onPressed: (){
+                            borrowerName=myController.text.toString();
+                            borrowerContactNum=contactNum.text.toString();
+                            borrowerAddress=address.text.toString();
+                            Navigator.of(context).pop(context);
+                            showDialog(context: context, builder: (context) {
+                              return new AlertDialog(
+                                title: new Text("Rental Details"),
+                                content: Column(
+                                  children: [
+                                    Image.network(widget.prod_detail_picture, height: 200,),
+                                    Divider(indent: 1.0,color: Colors.white),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        new Text("Bike Name:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red),),
+                                      ],
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        new Text(widget.prod_detail_name,  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0)),
+                                      ],
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        new Text("Bike Price:  ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red)),
+                                        new Text(widget.prod_detail_new_price.toString(),  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0)),
+                                      ],
+                                    ),
+                                    Divider(),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        new Text("Date:  ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        new Text(f.format(selectedDate)),
+                                      ],
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        new Text("$textValue:  ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        new Text(getHrDay.toString()),
+                                      ],
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        new Text("Quantity: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                                        new Text(dropdownValueTwo.toString()),
+                                      ],
+                                    ),
+                                    Divider(indent: 1.0,color: Colors.white),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        new Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                                        new Text('$finalTotal'),
+                                      ],
+                                    ),
+                                  ],
                                 ),
 
-                                new MaterialButton(onPressed: (){
-                                  Navigator.of(context).pop(context);
-                                },
-                                  child: new Text("close"),),
-                                // pressed ? Text(" text is here ") : SizedBox(),
-                              ],
-                            );
-                          });
-                        })
-                  ],
+                                actions: <Widget>[
+
+                                  new MaterialButton(
+
+                                    onPressed: (){
+                                      Navigator.of(context).pop(context);
+                                      setState(() {
+                                        pressed = true;
+                                      });
+                                      createRentalList(widget.prod_detail_picture, widget.user_Name, borrowerName, user.email.toString(), borrowerContactNum, borrowerAddress, widget.prod_detail_name,finalTotal,selectedDate, getHrDay,textValue, borrowerID);
+                                      SendMail();
+
+                                    },
+                                    child: new Text("              Rent Now              "),
+                                    minWidth: 60,
+                                    color: Colors.red,
+                                    textColor: Colors.white,
+                                    elevation: 0.2,
+                                  ),
+
+                                  new MaterialButton(onPressed: (){
+                                    Navigator.of(context).pop(context);
+                                  },
+                                    child: new Text("close"),),
+                                  // pressed ? Text(" text is here ") : SizedBox(),
+                                ],
+                              );
+                            });
+                          })
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -597,10 +647,8 @@ class _ProductDetailsState extends State<ProductDetails> {
               Expanded(
                 child: MaterialButton(
                     onPressed: () {
-
                       showMyDialog();
                       getFinalTotal();
-
                     },
                     color: Colors.red,
                     textColor: Colors.white,
@@ -612,9 +660,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                   icon: Icon(Icons.add_shopping_cart),
                   color: Colors.red,
                   onPressed:(){
+
                     // Single_cart_product().getCartId(countId);
                     //Single_cart_product(ctrId: countId.toString(),);
-                    createCartList(widget.prod_detail_picture, widget.prod_detail_name, widget.prod_detail_new_price, widget.prod_detail_frameset,
+                    createCartList(widget.user_Name, user.email.toString(),widget.prod_detail_picture, widget.prod_detail_name, widget.prod_detail_new_price, widget.prod_detail_frameset,
                         widget.prod_detail_fork, widget.prod_detail_cranks, widget.prod_detail_features,countId);
 
 
@@ -624,22 +673,23 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Center(
                 child: new IconButton(
-                    icon: Icon(Icons.favorite_border),
+                    icon: Icon(Icons.message),
                     color: Colors.red,
                     onPressed: () {
-                      format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-                      var chosenDate = selectedDate;
-                      var dDay = DateTime.now();
-                      Duration difference = chosenDate.difference(dDay);
-                      //assert(difference.inDays == 16592);
-                      print(format(difference));
+                      // MyChatHomePage();
+                      // format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+                      // var chosenDate = selectedDate;
+                      // var dDay = DateTime.now();
+                      // Duration difference = chosenDate.difference(dDay);
+                      // //assert(difference.inDays == 16592);
+                      // print(format(difference));
                     }),
               ),
             ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Text('Owner: '+user.displayName),
+            child: new Text('Owner: '+widget.user_Name),
           ),
 
           Divider(),
@@ -815,8 +865,5 @@ class Similar_single_prod extends StatelessWidget {
           )),
     );
   }
-
-
 }
-
 

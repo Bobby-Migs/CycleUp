@@ -23,10 +23,10 @@ SendMail() async {
     ..recipients.add(user.email)
     ..subject = 'CycleUp Baguio  ${DateTime.now()}'
     ..text = 'bobby pogi!!!!!.\nThis is line 2 of the text part.'
-    ..html = "<h1>Rental Successfull</h1>\n<>You will be notified once the bike you have rented is ready for pickup."
-        "Please arrive at the specified time of pick up and prepare the exact amount for the rental, you are also required to prepare a two valid ID. Thank you!"
+    ..html = "<h1>Rental Request Successfull</h1>\nYour rental is still up to pending until you have completed the needed requirements exclusively in the store."
+        "Please arrive before the specified time of pick up and prepare the exact amount for the rental, you are also required to prepare a two valid ID. Thank you!"
         "<br/><br/><br/>"
-        "<h3>It shall be the responsibility of the Biker-Borrower to comply with the following:</h3>><br/><br/>"
+        "<h3>It shall be the responsibility of the Biker-Borrower to comply with the following:</h3><br/><br/>"
         ""
         "1. It shall be the responsibility of the Biker to not ride on any lake or leave unsheltered on precipitous environments.<br/>"
         "2. Biker shall comply with the proper traffic laws at all times.<br/>"

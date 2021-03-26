@@ -54,6 +54,7 @@ class _Carts_productsState extends State<Carts_products> {
             prod_detail_frameset: userProductList[index]['frameset'],
             prod_detail_fork: userProductList[index]['fork'],
             prod_detail_cranks: userProductList[index]['cranks'],
+            user_Name: userProductList[index]['userName'],
           );
         });
   }
@@ -74,6 +75,7 @@ class ProductDetails extends StatefulWidget {
   final prod_type;
   final prod_detail_fork;
   final cart_id;
+  final user_Name;
 
   ProductDetails({
     this.prod_detail_name,
@@ -86,7 +88,8 @@ class ProductDetails extends StatefulWidget {
     this.prod_detail_date,
     this.prod_type,
     this.prod_detail_fork,
-    this.cart_id
+    this.cart_id,
+    this.user_Name,
   });
 
   @override
@@ -210,13 +213,13 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
 
-    Future createCartList(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
-      await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks, features, countId);
-    }
+    // Future createCartList(String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String countId) async {
+    //   await databaseManager().pushToCart(_image, bikeName, price, frameset, fork, cranks, features, countId);
+    // }
 
-    Future createRentalList(String userName, String userEmail,String bikeName, int price, DateTime selectedDate) async {
-      await databaseManager().pushToRentals(userName,userEmail,bikeName, price, selectedDate, );
-    }
+    // Future createRentalList(String userName, String userEmail, String contNum, String address, String bikeName, int price, DateTime selectedDate) async {
+    //   await databaseManager().pushToRentals(userName,userEmail,contNum, address, bikeName, price, selectedDate, );
+    // }
 
     return Scaffold(
       appBar: new AppBar(
@@ -273,323 +276,11 @@ class _ProductDetailsState extends State<ProductDetails> {
           // ======== the first buttons ===========
           Row(
             children: <Widget>[
-
-              //<<<<<<<<<<<<<<< the DATE button >>>>>>>>>>>>
-          //     Expanded(
-          //       child: MaterialButton(
-          //
-          //         onPressed: () => _selectDate(context),
-          //         color: Colors.white,
-          //         textColor: Colors.grey,
-          //         elevation: 0.2,
-          //         child: Row(children: <Widget>[
-          //           Expanded(child: new Text("Date")),
-          //           Expanded(child: new Icon(Icons.arrow_drop_down)),
-          //           // Expanded(child: new Text(selectedDate.toString())),
-          //         ]
-          //         ),
-          //
-          //       ),
-          //
-          //     ),
-          //
-          //     //<<<<<<<<<<<<<<< the hour button >>>>>>>>>>>>
-          //     Expanded(
-          //       child: MaterialButton(
-          //         onPressed: () {
-          //           showDialog(context: context, builder: (context) {
-          //             return StatefulBuilder(
-          //             builder: (context, setState) {
-          //               return AlertDialog(
-          //                 title: Column(
-          //                   children: [
-          //                     new Text("Rent Type"),
-          //                     Divider(indent: 5.0,color: Colors.white),
-          //                   ],
-          //                 ),
-          //
-          //                 content: Column(
-          //                   children: [
-          //                     new Text("1 hour = 80Php", style: TextStyle(height: 0, fontSize: 15),),
-          //                     Divider(indent: 1.0,color: Colors.white),
-          //                     new Text("1 Day = 500Php", style: TextStyle(height: 0, fontSize: 15),),
-          //                     Divider(indent: 6.0,color: Colors.white),
-          //                     Text("Choose type of rental and number of Day/Hr"),
-          //
-          //                     Padding(padding: const EdgeInsets.all(16.0),
-          //
-          //                       child: Column(
-          //                         children: <Widget>[
-          //                           Padding(
-          //                             padding: EdgeInsets.all(5.0),
-          //
-          //                             child: DropdownButton<String>(
-          //                               items: [
-          //                                 DropdownMenuItem<String>(
-          //                                   value: "Day",
-          //                                   child: Center(
-          //                                     child: Text("Day"),
-          //                                   ),
-          //                                 ),
-          //                                 DropdownMenuItem<String>(
-          //                                   value: "Hour",
-          //                                   child: Center(
-          //                                     child: Text("Hour"),
-          //                                   ),
-          //                                 ),
-          //                               ],
-          //                               onChanged: (_value) => {valuechanged(_value),
-          //                               setState(() {
-          //                               dropdownValue = _value;
-          //                               textValue = _value;
-          //                               }),
-          //                               },
-          //                               hint: Text("Type: $textValue",
-          //                                   style: TextStyle(color: Colors.grey)),
-          //                             ),
-          //                           ),
-          //
-          //                           Padding(
-          //                             padding: EdgeInsets.all(5.0),
-          //                             child: DropdownButton<String>(
-          //
-          //                               items: menuitems,
-          //                               onChanged: disabledropdown ? null : (
-          //                                   _value) => {secondvaluechanged(_value),//getNumValue(_value),
-          //                               setState(() {
-          //                               dropdownValue = _value;
-          //                              //int numValue = int.parse(_value);
-          //                               }),
-          //                               },
-          //                               hint: Text("Select a number",
-          //                                   style: TextStyle(color: Colors.grey)),
-          //                               disabledHint: Text(
-          //                                 "First select Day/Hr",
-          //                               ),
-          //                             ),
-          //
-          //                           ),
-          //
-          //                           //Text("$dropdownValue"),
-          //                         ],
-          //                       ),
-          //
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 //),
-          //
-          //                 actions: <Widget>[
-          //                   new MaterialButton(onPressed: () {
-          //                     Navigator.of(context).pop(context);
-          //                   },
-          //                     child: new Text("Ok"),)
-          //                 ],
-          //               );
-          //
-          //             },
-          //             );
-          //           });
-          //         },
-          //         color: Colors.white,
-          //         textColor: Colors.grey,
-          //         elevation: 0.2,
-          //         child: Row(children: <Widget>[
-          //           Expanded(child: new Text("Day/Hr")),
-          //           Expanded(child: new Icon(Icons.arrow_drop_down)),
-          //         ],),
-          //       ),
-          //     ),
-          //
-          //     //<<<<<<<<<<<<<<< the QUANTITY button >>>>>>>>>>>>
-          //     Expanded(
-          //       child: Column(
-          //         children: <Widget>[
-          //           Padding(
-          //             padding: EdgeInsets.all(5.0),
-          //             child: DropdownButton<String>(
-          //               items: [
-          //                 DropdownMenuItem<String>(
-          //                     value: "1",
-          //                     child: Center(
-          //                       child: Text("1"),
-          //                     ),
-          //                 ),
-          //                 DropdownMenuItem<String>(
-          //                   value: "2",
-          //                   child: Center(
-          //                     child: Text("2"),
-          //                   ),
-          //                 ),
-          //                 DropdownMenuItem<String>(
-          //                   value: "3",
-          //                   child: Center(
-          //                     child: Text("3"),
-          //                   ),
-          //                 ),
-          //                 DropdownMenuItem<String>(
-          //                   value: "4",
-          //                   child: Center(
-          //                     child: Text("4"),
-          //                   ),
-          //                 ),
-          //                 DropdownMenuItem<String>(
-          //                   value: "5",
-          //                   child: Center(
-          //                     child: Text("5"),
-          //                   ),
-          //                 ),
-          //               ],
-          //
-          //               onChanged: (_value) => {
-          //                 print(_value.toString()),
-          //                 setState((){
-          //                   dropdownValueTwo = _value;
-          //                 }),
-          //               },
-          //
-          //               hint: Text("Qty: $dropdownValueTwo"),
-          //               // disabledHint: Text("Qtysdgfsdgf"),
-          //             ),
-          //           ),
-          //           // Text("$dropdownValue"),
-          //         ],
-          //       ),
-          //
-          //     ),
-          //
-          //   ],
-          // ),
-          //
-          // // ======== the Rent now button ===========
-          // Row(
-          //   children: <Widget>[
-          //     //<<<<<<<<<<<<<<< the size button >>>>>>>>>>>
-          //     Expanded(
-          //       child: MaterialButton(
-          //           onPressed: () {
-          //             getFinalTotal();
-          //             showDialog(context: context, builder: (context) {
-          //               return new AlertDialog(
-          //                 title: new Text("Rental Details"),
-          //                 content: Column(
-          //                   children: [
-          //                     Image.network(widget.prod_detail_picture, height: 200,),
-          //                     Divider(indent: 1.0,color: Colors.white),
-          //                     Row(
-          //                       crossAxisAlignment: CrossAxisAlignment.start,
-          //                       children: [
-          //                         new Text("Bike Name:  ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red)),
-          //                         new Text(widget.prod_detail_name,  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0)),
-          //                       ],
-          //                     ),
-          //                     Row(
-          //                       crossAxisAlignment: CrossAxisAlignment.start,
-          //                       children: [
-          //                         new Text("Bike Price:  ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0,color: Colors.red)),
-          //                         new Text(widget.prod_detail_new_price.toString(),  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20.0)),
-          //                       ],
-          //                     ),
-          //                     Divider(),
-          //                     Row(
-          //                       crossAxisAlignment: CrossAxisAlignment.start,
-          //                       children: [
-          //                         new Text("Date:  ", style: TextStyle(fontWeight: FontWeight.bold)),
-          //                         new Text(f.format(selectedDate)),
-          //                       ],
-          //                     ),
-          //                     Row(
-          //                       crossAxisAlignment: CrossAxisAlignment.start,
-          //                       children: [
-          //                         new Text("$textValue:  ", style: TextStyle(fontWeight: FontWeight.bold)),
-          //                         new Text(getHrDay.toString()),
-          //                       ],
-          //                     ),
-          //                     Row(
-          //                       crossAxisAlignment: CrossAxisAlignment.start,
-          //                       children: [
-          //                         new Text("Quantity: ", style: TextStyle(fontWeight: FontWeight.bold)),
-          //                         new Text(dropdownValueTwo.toString()),
-          //                       ],
-          //                     ),
-          //                     Divider(indent: 1.0,color: Colors.white),
-          //                     Row(
-          //                       crossAxisAlignment: CrossAxisAlignment.start,
-          //                       children: [
-          //                         new Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-          //                         new Text('$finalTotal'),
-          //                       ],
-          //                     ),
-          //                   ],
-          //                 ),
-          //
-          //                 actions: <Widget>[
-          //
-          //                   new MaterialButton(
-          //
-          //                     onPressed: (){
-          //                     Navigator.of(context).pop(context);
-          //                       setState(() {
-          //                         pressed = true;
-          //                       });
-          //                     createRentalList(widget.prod_detail_name,finalTotal,selectedDate);
-          //                     SendMail();
-          //
-          //                   },
-          //                     child: new Text("              Rent Now              "),
-          //                     minWidth: 60,
-          //                     color: Colors.red,
-          //                     textColor: Colors.white,
-          //                     elevation: 0.2,
-          //                   ),
-          //
-          //                   new MaterialButton(onPressed: (){
-          //                     Navigator.of(context).pop(context);
-          //                   },
-          //                     child: new Text("close"),),
-          //                   // pressed ? Text(" text is here ") : SizedBox(),
-          //                 ],
-          //               );
-          //             });
-          //           },
-          //           color: Colors.red,
-          //           textColor: Colors.white,
-          //           elevation: 0.2,
-          //           child: new Text("Rent Now")),
-          //     ),
-          //
-          //     new IconButton(
-          //         icon: Icon(Icons.add_shopping_cart),
-          //         color: Colors.red,
-          //         onPressed:(){
-          //          // Single_cart_product().getCartId(countId);
-          //           //Single_cart_product(ctrId: countId.toString(),);
-          //           createCartList(widget.prod_detail_picture, widget.prod_detail_name, widget.prod_detail_new_price, widget.prod_detail_frameset,
-          //               widget.prod_detail_fork, widget.prod_detail_cranks, widget.prod_detail_features,countId);
-          //
-          //
-          //          // print(countId);
-          //         }
-          //
-          //     ),
-          //     Center(
-          //       child: new IconButton(
-          //           icon: Icon(Icons.favorite_border),
-          //           color: Colors.red,
-          //           onPressed: () {
-          //             format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-          //             var chosenDate = selectedDate;
-          //             var dDay = DateTime.now();
-          //             Duration difference = chosenDate.difference(dDay);
-          //             //assert(difference.inDays == 16592);
-          //             print(format(difference));
-          //           }),
-          //     ),
              ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: new Text('Owner: '+user.displayName),
+            child: new Text('Owner: '+widget.user_Name),
           ),
 
           Divider(),
@@ -597,7 +288,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             title: new Text("FEATURES"),
             subtitle: new Text(widget.prod_detail_features),
           ),
-          Divider(),
+          // Divider(),
           new ListTile(
             title: new Text("SPECIFICATION"),
           ),
@@ -638,9 +329,11 @@ class _ProductDetailsState extends State<ProductDetails> {
           //SIMILAR PRODUCTS SECTION
           Container(
             height: 70.0,
-            child:Text(''),
+            child:Text('Comments'),
             //Similar_products(),
           ),
+
+
         ],
       ),
     );
@@ -661,112 +354,3 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
 }
-
-
-
-
-class Similar_products extends StatefulWidget {
-  @override
-  _Similar_productsState createState() => _Similar_productsState();
-}
-
-class _Similar_productsState extends State<Similar_products> {
-  List userProductList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchDatabaseList();
-  }
-
-  fetchDatabaseList() async {
-    dynamic resultant = await databaseManager().getUsersList();
-
-    if(resultant == null){
-      print('Unable to retrieve');
-    }else {
-      setState(() {
-        userProductList = resultant;
-      });
-    }
-  }
-  get index => null;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-        itemCount: userProductList.length,
-        gridDelegate:
-        new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (BuildContext context, int index) {
-          return Similar_single_prod(
-            prod_name: userProductList[index]['name'],
-            prod_picture: userProductList[index]['picture'],
-            prod_fork: userProductList[index]['fork'],
-            prod_price: userProductList[index]['price'],
-            prod_frameset: userProductList[index]['frameset'],
-            prod_cranks: userProductList[index]['cranks'],
-
-          );
-        });
-  }
-}
-
-class Similar_single_prod extends StatelessWidget {
-  final prod_name;
-  final prod_picture;
-  final prod_price;
-  final prod_fork;
-  final prod_frameset;
-  final prod_cranks;
- // final prod_total;
-
-  Similar_single_prod(
-      {this.prod_name,
-        this.prod_picture,
-        this.prod_fork,
-        this.prod_price,
-        this.prod_frameset,
-        this.prod_cranks,
-      //  this.prod_total
-      });
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Hero(
-          tag: new Text("hero 1"),
-          child: Material(
-            child: InkWell(
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                // here we are passing the values of the product to the product details page
-                  builder: (context) => new ProductDetails(
-                    prod_detail_name: prod_name,
-                    prod_detail_new_price: prod_price,
-                    prod_detail_fork: prod_fork,
-                    prod_detail_picture: prod_picture,
-                    prod_detail_frameset: prod_frameset,
-                    prod_detail_cranks: prod_cranks,
-                  ))),
-              child: GridTile(
-                  footer: Container(
-                      color: Colors.white70,
-                      child: new Row(children: <Widget>[
-                        Expanded(
-                          child: Text(prod_name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),),
-                        ),
-                        new Text("\Php${prod_price}", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
-                      ],)
-                  ),
-                  child: Image.network(prod_picture, fit: BoxFit.cover,),
-              ),
-            ),
-          )),
-    );
-  }
-
-
-}
-
-

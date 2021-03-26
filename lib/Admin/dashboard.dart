@@ -4,11 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:cycle_up/Admin/RentalListNav.dart';
+import 'package:cycle_up/pages/login.dart';
 
 //my own imports
 import 'package:cycle_up/Admin/body.dart';
-import 'package:cycle_up/pages/myRentals.dart';
+import 'package:cycle_up/Admin/runningRentals.dart';
 
 import 'package:provider/provider.dart';
 
@@ -48,106 +49,98 @@ class _MyDashBoardState extends State<MyDashBoard> {
           //     onPressed: () {
           //       Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
           //     })
-          new IconButton(
-              icon: Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                final provider =
-                Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.logout();
-              })
+
         ],
       ),
-      // drawer: new Drawer(
-      //   child: new ListView(
-      //     children: <Widget>[
-      //       //  header
-      //       new UserAccountsDrawerHeader(
-      //         accountName: Text(
-      //           'Admin:' + user.displayName,
-      //         ),
-      //         accountEmail: Text(
-      //           'Email: ' + user.email,
-      //           style: TextStyle(color: Colors.white),
-      //         ),
-      //         currentAccountPicture: GestureDetector(
-      //           child: new CircleAvatar(
-      //             maxRadius: 25,
-      //             backgroundImage: NetworkImage(user.photoURL),
-      //           ),
-      //         ),
-      //         decoration: new BoxDecoration(color: Colors.red),
-      //       ),
-      //       //  body
-      //
-      //       InkWell(
-      //         onTap: () {
-      //           //Navigator.push(context, MaterialPageRoute(builder: (context)=> new MyDashBoard()));
-      //           Navigator.of(context).pop(context);
-      //         },
-      //         child: ListTile(
-      //           title: Text('Home Page'),
-      //           leading: Icon(Icons.home, color: Colors.red),
-      //         ),
-      //       ),
-      //
-      //       InkWell(
-      //         onTap: () {},
-      //         child: ListTile(
-      //           title: Text('My account'),
-      //           leading: Icon(Icons.person, color: Colors.red),
-      //         ),
-      //       ),
-      //
-      //       InkWell(
-      //         onTap: () {
-      //          // Navigator.push(context, MaterialPageRoute(builder: (context)=> new Rentals()));
-      //         },
-      //         child: ListTile(
-      //           title: Text('Create Listing'),
-      //           leading: Icon(Icons.add_to_photos_rounded, color: Colors.red),
-      //         ),
-      //       ),
-      //
-      //
-      //       Divider(),
-      //
-      //       InkWell(
-      //         onTap: () {},
-      //         child: ListTile(
-      //           title: Text('Settings'),
-      //           leading: Icon(Icons.settings),
-      //         ),
-      //       ),
-      //
-      //       InkWell(
-      //         onTap: () {},
-      //         child: ListTile(
-      //           title: Text('About'),
-      //           leading: Icon(Icons.help),
-      //         ),
-      //       ),
-      //
-      //       InkWell(
-      //         onTap: () {
-      //           // final provider =
-      //           // Provider.of<GoogleSignInProvider>(context, listen: false);
-      //           // provider.logout();
-      //           //Navigator.push(context, MaterialPageRoute(builder: (context)=> MyApp()));
-      //           Navigator.of(context).pop(context);
-      //         },
-      //         child: ListTile(
-      //           title: Text('Logout'),
-      //           leading: Icon(Icons.logout),
-      //
-      //         ),
-      //       ),
-      //
-      //     ],
-      //   ),
-      // ),
+      drawer: new Drawer(
+        child: new ListView(
+          children: <Widget>[
+            //  header
+            new UserAccountsDrawerHeader(
+              accountName: Text(
+                'Admin:' + user.displayName,
+              ),
+              accountEmail: Text(
+                'Email: ' + user.email,
+                style: TextStyle(color: Colors.white),
+              ),
+              currentAccountPicture: GestureDetector(
+                child: new CircleAvatar(
+                  maxRadius: 25,
+                  backgroundImage: NetworkImage(user.photoURL),
+                ),
+              ),
+              decoration: new BoxDecoration(color: Colors.red),
+            ),
+            //  body
+
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> MyDashBoard()));
+                // Navigator.of(context).pop(context);
+              },
+              child: ListTile(
+                title: Text('Dashboard'),
+                leading: Icon(Icons.home, color: Colors.red),
+              ),
+            ),
+
+            InkWell(
+
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> RentalListHome()));
+              },
+              child: ListTile(
+                title: Text('Bike Rentals'),
+                leading: Icon(Icons.directions_bike, color: Colors.red),
+              ),
+            ),
+
+            InkWell(
+              onTap: () {
+               // Navigator.push(context, MaterialPageRoute(builder: (context)=> new Rentals()));
+              },
+              child: ListTile(
+                title: Text('User Accounts'),
+                leading: Icon(Icons.account_circle_rounded, color: Colors.red),
+              ),
+            ),
+
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> runningRentals()));
+              },
+              child: ListTile(
+                title: Text('Running Rentals'),
+                leading: Icon(Icons.storage, color: Colors.red),
+              ),
+            ),
+
+
+            Divider(),
+
+            InkWell(
+              onTap: () {},
+              child: ListTile(
+                title: Text('About'),
+                leading: Icon(Icons.help),
+              ),
+            ),
+
+            InkWell(
+              onTap: () {
+                logout();
+              },
+              child: ListTile(
+                title: Text('Logout'),
+                leading: Icon(Icons.logout),
+
+              ),
+            ),
+
+          ],
+        ),
+      ),
       body: new ListView(
         children: <Widget>[
           new Padding(
@@ -161,7 +154,7 @@ class _MyDashBoardState extends State<MyDashBoard> {
           //PADDING WIDGET
           new Padding(
             padding: const EdgeInsets.fromLTRB(4.0, 5.0, 1.0, 5.0),
-            child: new Text('User Accounts', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            child: new Text('Bike Listing Requests', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
           ),
 
           //GRID VIEW
@@ -173,10 +166,14 @@ class _MyDashBoardState extends State<MyDashBoard> {
       ),
     );
   }
-
   void logout() async {
     await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+    FirebaseAuth.instance.signOut().then((value) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+    });
   }
 }
 

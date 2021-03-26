@@ -12,7 +12,8 @@ class Rental extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser;
   RentalOutput model;
   File fileMedia;
-  Rental({this.model});
+  Rental({
+    this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,10 @@ class Rental extends StatelessWidget {
           children: <Widget>[
             Center(
                 child: model.img == null ? Icon(Icons.photo, size: 120) : Image.file(model.img, width: 250,height: 300,)
+            ),
+            Container(
+
+              child: Text('Pending for Approval', style: TextStyle(fontSize: 15, color: Colors.red),),
             ),
             Row(
               children: [
@@ -109,18 +114,18 @@ class Rental extends StatelessWidget {
             Center(
               child: RaisedButton(
                 color: Colors.red,
-                child: Text('Confirm',
+                child: Text('Return to Home Page',
                     style: TextStyle(
                         color: Colors.white
                     ),),
                   onPressed: (){
-                    //Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
                     //Navigator.popUntil(context, (Route<dynamic> predicate) => predicate.isFirst);
                     //Navigator.popUntil(context, ModalRoute.withName('/HomePage'));
                     //Navigator.of(context).pop(context);
-                    for(int x= 0; x < 5-1; x++ ){
-                      Navigator.of(context).pop(context);
-                    }
+                    // for(int x= 0; x < 5-1; x++ ){
+                    //   Navigator.of(context).pop(context);
+                    // }
               }),
             )
 

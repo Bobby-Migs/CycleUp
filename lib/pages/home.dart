@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cycle_up/pages/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cycle_up/pages/notifications.dart';
 
 //my own imports
 import 'package:cycle_up/components/horizontal_listview.dart';
@@ -18,12 +19,14 @@ import 'package:cycle_up/pages/myRentals.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
   final user = FirebaseAuth.instance.currentUser;
   final googleSignIn = GoogleSignIn();
   @override
@@ -53,10 +56,14 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.red,
         title: InkWell(
             onTap: (){
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => super.widget));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                HomePage()),
+      ).then((value) => setState(() {}));
+      print("refresh done ");
+
             },
             child: Text('Cycle Up')),
         actions: <Widget>[
@@ -121,10 +128,12 @@ class _HomePageState extends State<HomePage> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new Notifcations()));
+              },
               child: ListTile(
-                title: Text('My account'),
-                leading: Icon(Icons.person, color: Colors.red),
+                title: Text('Notifications'),
+                leading: Icon(Icons.notifications, color: Colors.red),
               ),
             ),
 
@@ -169,9 +178,10 @@ class _HomePageState extends State<HomePage> {
 
             InkWell(
               onTap: () {
-                final provider =
-                Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.logout();
+                // final provider =
+                // context.read<GoogleSignInProvider>(context, listen: false);
+                // provider.logout();
+                logout();
               },
               child: ListTile(
                 title: Text('Logout'),
@@ -214,7 +224,12 @@ class _HomePageState extends State<HomePage> {
 
 void logout() async {
   await googleSignIn.disconnect();
-  FirebaseAuth.instance.signOut();
+  FirebaseAuth.instance.signOut().then((value) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Login()),
+    );
+  });
 }
 }
 

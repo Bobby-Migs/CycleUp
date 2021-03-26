@@ -11,10 +11,8 @@ import 'package:cycle_up/components/horizontal_listview.dart';
 import 'package:cycle_up/Renter_Page/RentProducts.dart';
 import 'package:cycle_up/pages/cart.dart';
 import 'package:cycle_up/pages/myRentals.dart';
-
-//trial
-//import 'package:cycle_up/widget/logged_in_widget.dart';
 import 'package:provider/provider.dart';
+
 
 class RentHomePage extends StatefulWidget {
 
@@ -93,8 +91,8 @@ class _RentHomePageState extends State<RentHomePage> {
 
             InkWell(
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=> new RentHomePage()));
-                Navigator.of(context).pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new RentHomePage()));
+
               },
               child: ListTile(
                 title: Text('Home Page'),
@@ -112,8 +110,8 @@ class _RentHomePageState extends State<RentHomePage> {
 
             InkWell(
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
-                Navigator.of(context).pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
+
               },
               child: ListTile(
                 title: Text('My Cart'),
@@ -143,9 +141,7 @@ class _RentHomePageState extends State<RentHomePage> {
               onTap: () {
 
                 //Navigator.push(context, MaterialPageRoute(builder: (context)=> new SignUpWidget()));
-                final provider =
-                Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.logout();
+               logout();
               },
               child: ListTile(
                 title: Text('Logout'),
@@ -188,10 +184,14 @@ class _RentHomePageState extends State<RentHomePage> {
 
   void logout() async {
     await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+    FirebaseAuth.instance.signOut().then((value) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+    });
   }
 }
-
 
 
 class ProductsSearch extends SearchDelegate<Single_prod>{
