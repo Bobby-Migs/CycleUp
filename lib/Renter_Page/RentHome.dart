@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cycle_up/pages/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cycle_up/About/aboutPage.dart';
 
 //my own imports
 import 'package:cycle_up/components/horizontal_listview.dart';
@@ -122,15 +123,9 @@ class _RentHomePageState extends State<RentHomePage> {
             Divider(),
 
             InkWell(
-              onTap: () {},
-              child: ListTile(
-                title: Text('Settings'),
-                leading: Icon(Icons.settings),
-              ),
-            ),
-
-            InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> AboutPage()));
+              },
               child: ListTile(
                 title: Text('About'),
                 leading: Icon(Icons.help),
@@ -153,31 +148,28 @@ class _RentHomePageState extends State<RentHomePage> {
           ],
         ),
       ),
-      body: new ListView(
-        children: <Widget>[
-          //START OF IMAGE CAROUSEL
-          imageCarousel,
-          //PADDING WIDGET
-          new Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: new
-            Text(''),
-          ), //Padding
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: new ListView(
+          children: <Widget>[
+            //START OF IMAGE CAROUSEL
+            imageCarousel, //Padding
 
-          //START OF HORIZONTAL LIST VIEW
-          // HorizontalList(),
-          //PADDING WIDGET
-          new Padding(
-            padding: const EdgeInsets.fromLTRB(4.0, 5.0, 1.0, 5.0),
-            child: new Text('Bike Collections'),
-          ),
+            //START OF HORIZONTAL LIST VIEW
+            // HorizontalList(),
+            //PADDING WIDGET
+            new Padding(
+              padding: const EdgeInsets.fromLTRB(4.0, 10.0, 1.0, 5.0),
+              child: new Text('Bike Collections'),
+            ),
 
-          //GRID VIEW
-          Container(
-            height: 320.0,
-            child: Products(),
-          )
-        ],
+            //GRID VIEW
+            Container(
+              height: MediaQuery.of(context).size.height/1.9,
+              child: Products(),
+            )
+          ],
+        ),
       ),
     );
   }

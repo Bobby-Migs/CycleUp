@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:cycle_up/pages/home.dart';
 import 'package:cycle_up/components/databaseManager.dart';
 import 'package:cycle_up/Admin/listRequestDetails.dart';
-import 'package:cycle_up/Admin/dashboard.dart';
+import 'package:cycle_up/Admin/runningRentBody.dart';
 
 class PushToDisplayedBikes extends StatefulWidget {
   @override
   _PushToDisplayedBikesState createState() => _PushToDisplayedBikesState();
 }
-
 
 class _PushToDisplayedBikesState extends State<PushToDisplayedBikes> {
   List userProductList = [];
@@ -22,8 +21,9 @@ class _PushToDisplayedBikesState extends State<PushToDisplayedBikes> {
     fetchDatabaseList();
   }
 
+
   fetchDatabaseList() async {
-    dynamic resultant = await databaseManager().getDisplayedBikes();
+    dynamic resultant = await databaseManager().getBikeCollections();
 
     if(resultant == null){
       print('Unable to retrieve');
@@ -53,7 +53,8 @@ class _PushToDisplayedBikesState extends State<PushToDisplayedBikes> {
             prod_features: userProductList[index]['features'],
             prod_userName: userProductList[index]['userName'],
             prod_userEmail: userProductList[index]['userEmail'],
-            listID: userProductList[index]['displayID'],
+            listID: userProductList[index]['bikeID'],
+
           );
         }
     );
@@ -61,7 +62,8 @@ class _PushToDisplayedBikesState extends State<PushToDisplayedBikes> {
 
 }
 
-class Single_prod extends StatelessWidget {
+
+class Single_prod extends StatefulWidget {
   final prod_name;
   final prod_picture;
   final prod_price;
@@ -85,8 +87,20 @@ class Single_prod extends StatelessWidget {
         this.prod_features,
         this.prod_userEmail,
         this.prod_userName,
-        this.listID
+        this.listID,
       });
+
+  @override
+  _Single_prodState createState() => _Single_prodState();
+}
+
+class _Single_prodState extends State<Single_prod> {
+
+  void _refreshPage() {
+    setState(() {
+      print('page is refreshed');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,22 +130,27 @@ class Single_prod extends StatelessWidget {
               child: Card (
                 child: ListTile(
                   // <<<<<<<<<<<< LEADING SECTION >>>>>>>>>>>>>
-                  leading: new Image.network(prod_picture, width: 80.0, height: 80.0,),
-
+                  leading: new Image.network(widget.prod_picture, width: 80.0, height: 80.0,),
                   // <<<<<<<<<<<<< TITLE SECTION >>>>>>>>>>>>
                   title: Row(
                     children: [
                       Container(
                           width: MediaQuery.of(context).size.width /2.25,
-                          child: Text("By: "+prod_userName)),
-                      // MaterialButton(
-                      //   minWidth: 1,
-                      //   onPressed: (){
-                      //     databaseManager().deleteListingReq(this.listID);
-                      //     Navigator.push(context, MaterialPageRoute(builder: (context)=> MyDashBoard()));
-                      //   },
-                      //   child: Text('X', style: TextStyle(color: Colors.grey),),
-                      // )
+                          child: Text("By: "+widget.prod_userName)),
+                      MaterialButton(
+                        minWidth: 1,
+                        onPressed: (){
+                          databaseManager().deleteBike(this.widget.listID);
+                          // Navigator.push(context, MaterialPageRoute(builder: (context)=> MyDashBoard()));
+                           //Navigator.push( context, MaterialPageRoute( builder: (context) => this.widget), ).then((value) => _refreshPage());
+                          //_refreshPage();
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => DisplayedBikes()));
+                        },
+                        child: Text('X', style: TextStyle(color: Colors.grey),),
+                      )
                     ],
 
                   ),
@@ -144,7 +163,7 @@ class Single_prod extends StatelessWidget {
                       new Container(
                         alignment: Alignment.topLeft,
                         child: new Text(
-                          prod_userEmail,
+                          widget.prod_userEmail,
                           style: TextStyle(
                               fontSize: 17.0,
                               fontWeight: FontWeight.bold),
@@ -163,7 +182,6 @@ class Single_prod extends StatelessWidget {
           )),
     );
   }
-
 }
 
 

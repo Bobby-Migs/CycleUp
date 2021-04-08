@@ -48,7 +48,8 @@ class _RentalListDetailsState extends State<RentalListDetails> {
   Widget build(BuildContext context) {
     String runningRentalID = FirebaseFirestore.instance.collection("runningRentals").doc().id;
 
-    Future createRentalList(String image, String ownerName, String userName, String userEmail, String contNum, String address, String bikeName, int price, DateTime selectedDate) async {
+
+    Future createRentalList(String image, String ownerName, String userName, String userEmail, String contNum, String address, String bikeName, int price, DateTime selectedDate, ) async {
       await databaseManager().pushToRentalRequest(image, ownerName, userName, userEmail, contNum, address, bikeName, price, selectedDate, );
     }
     Future sendNotif(String ownerName, String borrowerName, String bikeName, String message, DateTime selectedDated, DateTime rentalDueDate) async {

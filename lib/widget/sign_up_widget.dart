@@ -110,9 +110,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 30),
-          width: 300,
-          height: 500,
+          margin: EdgeInsets.all(30),
+          width:  MediaQuery.of(context).size.width,
+          height:  MediaQuery.of(context).size.height/1.25,
           decoration: BoxDecoration(
             border: Border.all(
               color: Colors.white70,

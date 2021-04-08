@@ -58,9 +58,7 @@ class _Cart_productsState extends State<Cart_products> {
   }
 }
 
-class Single_cart_product extends StatelessWidget {
-  final user = FirebaseAuth.instance.currentUser;
-
+class Single_cart_product extends StatefulWidget {
   final cart_prod_name;
   final cart_prod_picture;
   final cart_prod_price;
@@ -84,11 +82,12 @@ class Single_cart_product extends StatelessWidget {
         this.user_Name
       });
 
-  // String cartID;
-  //
-  // getCartId(String id){
-  //   cartID = id;
-  // }
+  @override
+  _Single_cart_productState createState() => _Single_cart_productState();
+}
+
+class _Single_cart_productState extends State<Single_cart_product> {
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -96,35 +95,35 @@ class Single_cart_product extends StatelessWidget {
       onTap: ()=> Navigator.of(context).push(new MaterialPageRoute(
         // here we are passing the values of the cartList to the product details page
         builder: (context) => new ProductDetails(
-          prod_detail_name: cart_prod_name,
-          prod_detail_new_price: cart_prod_price,
-          prod_detail_picture: cart_prod_picture,
-          prod_detail_frameset: cart_prod_frameset,
-          prod_detail_cranks: cart_prod_cranks,
-          prod_detail_fork: cart_prod_fork,
-          cart_id: ctrId.toString(),
-          prod_detail_features: cart_prod_feature,
-          ownerEmail: ownerEmail,
-          user_Name: user_Name,
+          prod_detail_name: widget.cart_prod_name,
+          prod_detail_new_price: widget.cart_prod_price,
+          prod_detail_picture: widget.cart_prod_picture,
+          prod_detail_frameset: widget.cart_prod_frameset,
+          prod_detail_cranks: widget.cart_prod_cranks,
+          prod_detail_fork: widget.cart_prod_fork,
+          cart_id: widget.ctrId.toString(),
+          prod_detail_features: widget.cart_prod_feature,
+          ownerEmail: widget.ownerEmail,
+          user_Name: widget.user_Name,
 
         ),
       )),
       child: Card(
         child: ListTile(
           // <<<<<<<<<<<< LEADING SECTION >>>>>>>>>>>>>
-          leading: new Image.network(cart_prod_picture, width: 80.0, height: 80.0,),
+          leading: new Image.network(widget.cart_prod_picture, width: 80.0, height: 80.0,),
 
           // <<<<<<<<<<<<< TITLE SECTION >>>>>>>>>>>>
           title: Row(
             children: [
               Container(
                   width: MediaQuery.of(context).size.width /3,
-                  child: Text(cart_prod_name)),
+                  child: Text(widget.cart_prod_name)),
               Container(
                 child: MaterialButton(
                     child: Text('Remove', style: TextStyle(color: Colors.red),),
                     onPressed: (){
-                      databaseManager().deleteUser(this.ctrId);
+                      databaseManager().deleteUser(this.widget.ctrId);
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> Cart()));
                     }),
               )
@@ -139,7 +138,7 @@ class Single_cart_product extends StatelessWidget {
               new Container(
                 alignment: Alignment.topLeft,
                 child: new Text(
-                  "\Php${cart_prod_price}",
+                  "\Php${widget.cart_prod_price}",
                   style: TextStyle(
                     fontSize: 17.0,
                     fontWeight: FontWeight.bold),

@@ -11,57 +11,6 @@ import 'package:cycle_up/components/databaseManager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cycle_up/components/sendMail.dart';
 
-import '../components/cart_products.dart';
-
-class Carts_products extends StatefulWidget {
-  @override
-  _Carts_productsState createState() => _Carts_productsState();
-}
-
-class _Carts_productsState extends State<Carts_products> {
-  List userProductList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchDatabaseList();
-  }
-
-  fetchDatabaseList() async {
-    dynamic resultant = await databaseManager().getUsersList();
-
-    if(resultant == null){
-      print('Unable to retrieve');
-    }else {
-      setState(() {
-        userProductList = resultant;
-      });
-    }
-  }
-  get index => null;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-        itemCount: userProductList.length,
-        gridDelegate:
-        new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (BuildContext context, int index) {
-          return ProductDetails(
-            prod_detail_name: userProductList[index]['name'],
-            prod_detail_picture: userProductList[index]['picture'],
-            prod_detail_new_price: userProductList[index]['price'],
-            prod_detail_frameset: userProductList[index]['frameset'],
-            prod_detail_fork: userProductList[index]['fork'],
-            prod_detail_cranks: userProductList[index]['cranks'],
-            user_Name: userProductList[index]['userName'],
-            ownerEmail: userProductList[index]['userEmail'],
-          );
-        });
-  }
-}
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 class ProductDetails extends StatefulWidget {
 
@@ -78,6 +27,9 @@ class ProductDetails extends StatefulWidget {
   final cart_id;
   final user_Name;
   final ownerEmail;
+  final bikeColID;
+  final comment;
+
 
   ProductDetails({
     this.prod_detail_name,
@@ -93,6 +45,9 @@ class ProductDetails extends StatefulWidget {
     this.cart_id,
     this.user_Name,
     this.ownerEmail,
+    this.bikeColID,
+    this.comment,
+
   });
 
   @override
@@ -101,95 +56,31 @@ class ProductDetails extends StatefulWidget {
 
 
 class _ProductDetailsState extends State<ProductDetails> {
-  final nameHolder = TextEditingController();
+
+  List userProductList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await getMessage();
+    if(resultant == null){
+      print('Unable to retrieve');
+    }else {
+      setState(() {
+        userProductList = resultant;
+      });
+    }
+  }
+  get index => null;
+
+
+
+
   final user = FirebaseAuth.instance.currentUser;
-  bool _isButtonDisabled = false;
-  String dropdownValueTwo = '';
-  String dropdownValue = '';
-  String textValue='';
-  int numValue=0;
-
-  bool disabledropdown = true;
-  List<DropdownMenuItem<String>> menuitems = List();
-
-  final Day = {
-    "1": "1",
-    "2": "2",
-    "3": "3",
-    "4": "4",
-    "5": "5",
-    "6": "6",
-    "7": "7",
-  };
-  final Hour = {
-    "1": "1",
-    "2": "2",
-    "3": "3",
-    "4": "4",
-    "5": "5",
-    "6": "6",
-    "7": "7",
-    "8": "8",
-    "9": "9",
-    "10": "10",
-    "11": "11",
-  };
-  void populateday(){
-    for(String key in Day.keys){
-      menuitems.add(DropdownMenuItem<String>(
-        value: Day[key],
-        child: Center(
-          child: Text(
-            Day[key],
-          ),
-        ),
-      ));
-    }
-  }
-  void populateHour(){
-    for(String key in Hour.keys){
-      menuitems.add(DropdownMenuItem<String>(
-        value: Hour[key],
-        child: Center(
-          child: Text(
-            Hour[key],
-          ),
-        ),
-      ));
-    }
-  }
-
-  void valuechanged(_value){
-    if(_value == "Day"){
-      typeValue = 500;
-      populateday();
-    }else if(_value =="Hour"){
-      typeValue = 80;
-      populateHour();
-    }
-    setState((){
-      dropdownValue = _value;
-      disabledropdown = false;
-    });
-  }
-
-  void secondvaluechanged(_value){
-   // numValue=int.parse(_value);
-    getHrDay =  int.parse(_value);
-    totalRentType = typeValue * int.parse(_value);
-    setState((){
-      dropdownValue = _value;
-    });
-  }
-
-  void getFinalTotal(){
-     finalTotal = totalRentType + (int.parse(dropdownValueTwo)*widget.prod_detail_new_price);
-}
-
-  int getHrDay=0;
-  int typeValue=0;
-  int totalRentType=0;
-  int finalTotal = 0;
 
   // DATE VARIABLE
   DateTime selectedDate = DateTime.now();
@@ -197,15 +88,23 @@ class _ProductDetailsState extends State<ProductDetails> {
   // HOURS VARIABLE
   final myController = TextEditingController();
   bool pressed = false;
+  String userMessage;
+
   String countId = FirebaseFirestore.instance.collection("cartItems").doc().id;
 
-
+  Future createMessage(String messageID, String message, String userName) async {
+    await databaseManager().pushTOComments(messageID, message, userName);
+  }
+  
   //<<<<<< OVERRIDE FOR HOURS >>>>>>
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     myController.dispose();
     super.dispose();
+  }
+  clearTextInput(){
+    myController.clear();
   }
 
   @override
@@ -222,12 +121,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               },
             child: Text('Cycle Up')),
         actions: <Widget>[
-          // new IconButton(
-          //     icon: Icon(
-          //       Icons.search,
-          //       color: Colors.white,
-          //     ),
-          //     onPressed: () {}),
+
         ],
       ),
 
@@ -312,44 +206,117 @@ class _ProductDetailsState extends State<ProductDetails> {
               ]
           ),
           Divider(),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: new Text("Similar Bikes"),
-          // ),
-          //SIMILAR PRODUCTS SECTION
-          // Container(
-          //   height: 70.0,
-          //   child:Text('Comments'),
-          //   //Similar_products(),
-          // ),
-          // Container(
-          //     width: 280,
-          //     padding: EdgeInsets.all(10.0),
-          //     child: TextField(
-          //       controller: nameHolder,
-          //       autocorrect: true,
-          //       decoration: InputDecoration(hintText: 'Enter Your Name Here'),
-          //     )
-          // ),
+
+          Container(
+            height: 20.0,
+            child:Text('Comments'),
+            //Similar_products(),
+          ),
+          Container(
+            height: 250,
+            child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: userProductList.length,
+                  itemBuilder: (context, index) {
+                    return MessageViewer(
+                      message: userProductList[index]['message'],
+                      userName: userProductList[index]['userName'],
+                    );
+                  }
+              ),
+          ),
+            Container(
+              width: 280,
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: myController,
+                      autocorrect: true,
+                      decoration: InputDecoration(hintText: 'Leave a comment'),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.send_sharp),
+                    onPressed: (){
+                      userMessage=(DateTime.now().toString()+'\n    '+myController.text).toString();
+                      createMessage(widget.bikeColID, userMessage, user.displayName);
+                      fetchDatabaseList();
+                      clearTextInput();
+                    },
+                  )
+                ],
+              )
+          ),
 
 
         ],
       ),
     );
+
   }
-//  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< DATE METHOD >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate, // Refer step 1
-      firstDate: DateTime(2021),
-      lastDate: DateTime(2022),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
+  Future getMessage() async {
+    List itemList =[];
+
+    try{
+      await FirebaseFirestore.instance.collection('comments')
+          .where('messageID', isEqualTo: widget.bikeColID )
+          .orderBy('message', )
+          .get().then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((element) {
+          itemList.add(element.data());
+          print(element["message"]);
+        }),
       });
-    // return selectedDate;
+      return itemList;
+    }catch (e){
+      print(e.toString());
+      return null;
+    }
   }
 
 }
+
+
+
+class MessageViewer extends StatefulWidget {
+  final userName;
+  final message;
+  MessageViewer({
+    this.userName,
+    this.message
+});
+
+  @override
+  _MessageViewerState createState() => _MessageViewerState();
+}
+
+class _MessageViewerState extends State<MessageViewer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
+            ),
+            color: Colors.black12
+        ),
+        padding: EdgeInsets.fromLTRB(12, 8, 12, 12),
+        constraints: BoxConstraints(maxWidth: 50),
+        margin: EdgeInsets.fromLTRB(10, 0, 50, 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.userName, style: TextStyle(color: Colors.blueGrey),),
+            Text(widget.message),
+
+          ],
+        )
+    );
+  }
+}
+

@@ -1,22 +1,13 @@
-import 'package:cycle_up/pages/product_details.dart';
-import 'package:cycle_up/provider/google_sign_in.dart';
-import 'package:cycle_up/widget/sign_up_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cycle_up/pages/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cycle_up/pages/notifications.dart';
-
-//my own imports
-import 'package:cycle_up/components/horizontal_listview.dart';
+import 'package:cycle_up/About/aboutPage.dart';
 import 'package:cycle_up/components/products.dart';
-import 'package:cycle_up/pages/cart.dart';
 import 'package:cycle_up/pages/myRentals.dart';
 
-//trial
-//import 'package:cycle_up/widget/logged_in_widget.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -111,15 +102,8 @@ class _HomePageState extends State<HomePage> {
 
             InkWell(
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
-                Navigator.of(context).pop(context);
-               // Navigator.popUntil(context, ModalRoute.withName('/HomePage'));
-               //  Navigator.of(context).push(
-               //    MaterialPageRoute(
-               //      settings: RouteSettings(name: "/HomePage"),
-               //      builder: (context) => HomePage(),
-               //    ),
-               //  );
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+
               },
               child: ListTile(
                 title: Text('Home Page'),
@@ -147,28 +131,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // InkWell(
-            //   onTap: () {
-            //     Navigator.push(context, MaterialPageRoute(builder: (context)=> new Cart()));
-            //   },
-            //   child: ListTile(
-            //     title: Text('My Cart'),
-            //     leading: Icon(Icons.shopping_cart, color: Colors.red),
-            //   ),
-            // ),
-
             Divider(),
 
-            InkWell(
-              onTap: () {},
-              child: ListTile(
-                title: Text('Settings'),
-                leading: Icon(Icons.settings),
-              ),
-            ),
 
             InkWell(
               onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> new AboutPage()));
               },
               child: ListTile(
                 title: Text('About'),
@@ -193,31 +161,33 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: new ListView(
-        children: <Widget>[
-          //START OF IMAGE CAROUSEL
-          imageCarousel,
-          //PADDING WIDGET
-          new Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: new
-            Text(''),
-          ), //Padding
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: new ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            //START OF IMAGE CAROUSEL
+            Container(
+               //height: MediaQuery.of(context).size.height/1.5,
+                child: imageCarousel),
 
-          //START OF HORIZONTAL LIST VIEW
-         // HorizontalList(),
-          //PADDING WIDGET
-          new Padding(
-            padding: const EdgeInsets.fromLTRB(4.0, 5.0, 1.0, 5.0),
-            child: new Text('Bike Collections'),
-          ),
+            //START OF HORIZONTAL LIST VIEW
+           // HorizontalList(),
+            //PADDING WIDGET
+            Container(
+              child: new Padding(
+                padding: const EdgeInsets.fromLTRB(4.0, 10.0, 1.0, 5.0),
+                child: new Text('Bike Collections'),
+              ),
+            ),
 
-          //GRID VIEW
-          Container(
-            height: 320.0,
-            child: Products(),
-          )
-        ],
+            //GRID VIEW
+            Container(
+              height: MediaQuery.of(context).size.height/1.9,
+                child: Products()
+            )
+          ],
+        ),
       ),
     );
   }

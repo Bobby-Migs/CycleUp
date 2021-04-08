@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cycle_up/components/databaseManager.dart';
-import 'package:cycle_up/Admin/RentalListDetails.dart';
+import 'package:cycle_up/Admin/runningRentals.dart';
 import 'package:cycle_up/Admin/RentalListNav.dart';
 
 class DisplayRunningRentals extends StatefulWidget {
@@ -129,18 +129,18 @@ class _RentalListBodyState extends State<RentalListBody> {
             //     )),
             //   ),
             // ),
-            // MaterialButton(
-            //   minWidth: 1,
-            //   onPressed: (){
-            //     databaseManager().deleteBorrowReq(this.widget.borrowerDocID);
-            //     // Navigator.push(context, MaterialPageRoute(builder: (context)=> RentalListHome()));
-            //     Navigator.pushReplacement(
-            //         context,
-            //         MaterialPageRoute(
-            //             builder: (BuildContext context) => RentalListHome()));
-            //   },
-            //   child: Text('x', style: TextStyle(color: Colors.grey),),
-            // ),
+            MaterialButton(
+              minWidth: 1,
+              onPressed: (){
+                databaseManager().deleteRental(this.widget.borrowerDocID);
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=> RentalListHome()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => runningRentals()));
+              },
+              child: Text('x', style: TextStyle(color: Colors.grey),),
+            ),
           ],
         ),
 

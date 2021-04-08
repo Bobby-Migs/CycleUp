@@ -83,6 +83,7 @@ class ProductDetails extends StatefulWidget {
   final cart_id;
   final user_Name;
   final ownerEmail;
+  final bikeColID;
 
   ProductDetails({
     this.prod_detail_name,
@@ -97,7 +98,8 @@ class ProductDetails extends StatefulWidget {
     this.prod_detail_fork,
     this.cart_id,
     this.user_Name,
-    this.ownerEmail
+    this.ownerEmail,
+    this.bikeColID
   });
 
   @override
@@ -115,7 +117,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   String borrowerName;
   String borrowerContactNum;
   String borrowerAddress;
-
+  String userMessage;
   bool disabledropdown = true;
   List<DropdownMenuItem<String>> menuitems = List();
 
@@ -232,7 +234,28 @@ class _ProductDetailsState extends State<ProductDetails> {
     super.dispose();
   }
 
+  List userProductList = [];
 
+  @override
+  void initState() {
+    super.initState();
+    fetchDatabaseList();
+  }
+
+  fetchDatabaseList() async {
+    dynamic resultant = await getMessage();
+    if(resultant == null){
+      print('Unable to retrieve');
+    }else {
+      setState(() {
+        userProductList = resultant;
+      });
+    }
+  }
+  get index => null;
+  clearTextInput(){
+    myController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -243,6 +266,9 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     Future createRentalList(String image, String ownerName, String userName, String userEmail, String contNum, String address, String bikeName, int price, DateTime selectedDate, int days, String type, String ID) async {
       await databaseManager().pushToRentals(image, ownerName, userName, userEmail, contNum, address, bikeName, price, selectedDate, days, type, ID );
+    }
+    Future createMessage(String messageID, String message, String userName) async {
+      await databaseManager().pushTOComments(messageID, message, userName);
     }
 
     showMyDialog() {
@@ -736,15 +762,48 @@ class _ProductDetailsState extends State<ProductDetails> {
               ]
           ),
           Divider(),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: new Text("Similar Bikes"),
-          // ),
-          //SIMILAR PRODUCTS SECTION
+
           Container(
-            height: 70.0,
-            child:Text(''),
+            height: 20.0,
+            child:Text('Comments'),
             //Similar_products(),
+          ),
+          Container(
+            height: 250,
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: userProductList.length,
+                itemBuilder: (context, index) {
+                  return MessageViewer(
+                    message: userProductList[index]['message'],
+                    userName: userProductList[index]['userName'],
+                  );
+                }
+            ),
+          ),
+          Container(
+              width: 280,
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: myController,
+                      autocorrect: true,
+                      decoration: InputDecoration(hintText: 'Leave a comment'),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.send_sharp),
+                    onPressed: (){
+                      userMessage=(DateTime.now().toString()+'\n    '+myController.text).toString();
+                      createMessage(widget.bikeColID, userMessage, user.displayName);
+                      fetchDatabaseList();
+                      clearTextInput();
+                    },
+                  )
+                ],
+              )
           ),
         ],
       ),
@@ -765,110 +824,68 @@ class _ProductDetailsState extends State<ProductDetails> {
     // return selectedDate;
   }
 
-}
+  Future getMessage() async {
+    List itemList =[];
 
-
-
-
-class Similar_products extends StatefulWidget {
-  @override
-  _Similar_productsState createState() => _Similar_productsState();
-}
-
-class _Similar_productsState extends State<Similar_products> {
-  List userProductList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchDatabaseList();
-  }
-
-  fetchDatabaseList() async {
-    dynamic resultant = await databaseManager().getUsersList();
-
-    if(resultant == null){
-      print('Unable to retrieve');
-    }else {
-      setState(() {
-        userProductList = resultant;
+    try{
+      await FirebaseFirestore.instance.collection('comments')
+          .where('messageID', isEqualTo: widget.bikeColID)
+          .orderBy('message', )
+          .get().then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((element) {
+          itemList.add(element.data());
+          print(element["message"]);
+        }),
       });
+      return itemList;
+    }catch (e){
+      print(e.toString());
+      return null;
     }
   }
-  get index => null;
 
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-        itemCount: userProductList.length,
-        gridDelegate:
-        new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-        itemBuilder: (BuildContext context, int index) {
-          return Similar_single_prod(
-            prod_name: userProductList[index]['name'],
-            prod_picture: userProductList[index]['picture'],
-            prod_fork: userProductList[index]['fork'],
-            prod_price: userProductList[index]['price'],
-            prod_frameset: userProductList[index]['frameset'],
-            prod_cranks: userProductList[index]['cranks'],
-
-          );
-        });
-  }
 }
 
-class Similar_single_prod extends StatelessWidget {
-  final prod_name;
-  final prod_picture;
-  final prod_price;
-  final prod_fork;
-  final prod_frameset;
-  final prod_cranks;
-  // final prod_total;
 
-  Similar_single_prod(
-      {this.prod_name,
-        this.prod_picture,
-        this.prod_fork,
-        this.prod_price,
-        this.prod_frameset,
-        this.prod_cranks,
-        //  this.prod_total
-      });
-
+class MessageViewer extends StatefulWidget {
+  final userName;
+  final message;
+  MessageViewer({
+    this.userName,
+    this.message
+  });
 
   @override
+  _MessageViewerState createState() => _MessageViewerState();
+}
+
+class _MessageViewerState extends State<MessageViewer> {
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Hero(
-          tag: new Text("hero 1"),
-          child: Material(
-            child: InkWell(
-              onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                // here we are passing the values of the product to the product details page
-                  builder: (context) => new ProductDetails(
-                    prod_detail_name: prod_name,
-                    prod_detail_new_price: prod_price,
-                    prod_detail_fork: prod_fork,
-                    prod_detail_picture: prod_picture,
-                    prod_detail_frameset: prod_frameset,
-                    prod_detail_cranks: prod_cranks,
-                  ))),
-              child: GridTile(
-                footer: Container(
-                    color: Colors.white70,
-                    child: new Row(children: <Widget>[
-                      Expanded(
-                        child: Text(prod_name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),),
-                      ),
-                      new Text("\Php${prod_price}", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
-                    ],)
-                ),
-                child: Image.network(prod_picture, fit: BoxFit.cover,),
-              ),
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
             ),
-          )),
+            color: Colors.black12
+        ),
+        padding: EdgeInsets.fromLTRB(12, 8, 12, 12),
+        constraints: BoxConstraints(maxWidth: 50),
+        margin: EdgeInsets.fromLTRB(10, 0, 50, 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.userName, style: TextStyle(color: Colors.blueGrey),),
+            Text(widget.message),
+
+          ],
+        )
     );
   }
 }
+
+
 

@@ -120,14 +120,6 @@ class _MyDashBoardState extends State<MyDashBoard> {
             Divider(),
 
             InkWell(
-              onTap: () {},
-              child: ListTile(
-                title: Text('About'),
-                leading: Icon(Icons.help),
-              ),
-            ),
-
-            InkWell(
               onTap: () {
                 logout();
               },

@@ -48,8 +48,8 @@ class RequestDetails extends StatefulWidget {
 class _RequestDetailsState extends State<RequestDetails> {
   @override
   Widget build(BuildContext context) {
-    Future createProduct(String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
-      await databaseManager().pushBikeCollections(userName, userEmail, _image, bikeName, price, frameset, fork, cranks, features);
+    Future createProduct(String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, String bikeID) async {
+      await databaseManager().pushBikeCollections(userName, userEmail, _image, bikeName, price, frameset, fork, cranks, features, bikeID);
     }
     Future sendNotif(String ownerName, String borrowerName, String bikeName, String message, DateTime selectedDated, DateTime rentalDueDate) async {
       await databaseManager().pushToNotification(ownerName, borrowerName, bikeName, message, selectedDated,rentalDueDate);
@@ -59,6 +59,7 @@ class _RequestDetailsState extends State<RequestDetails> {
     }
     String notifMessage= "Mr/Ms. ${widget.user_Name} your request to list your bike ${widget.prod_detail_name} has been permitted. Your bike will be now available for rental.";
     String displayID = FirebaseFirestore.instance.collection("displayedBikes").doc().id;
+    String bikeID = FirebaseFirestore.instance.collection("bikeCollections").doc().id;
 
     return Scaffold(
       appBar: new AppBar(
@@ -168,7 +169,7 @@ class _RequestDetailsState extends State<RequestDetails> {
             MaterialButton(
               onPressed: (){
                 createProduct(widget.user_Name, widget.user_Email, widget.prod_detail_picture, widget.prod_detail_name,
-                    widget.prod_detail_new_price, widget.prod_detail_frameset, widget.prod_detail_fork, widget.prod_detail_cranks, widget.prod_detail_features);
+                    widget.prod_detail_new_price, widget.prod_detail_frameset, widget.prod_detail_fork, widget.prod_detail_cranks, widget.prod_detail_features, bikeID);
                 //SENDS THE NOTIFICATION TO DATABASE AND TO THE OWNER
                 sendNotif(widget.user_Name, "",  widget.prod_detail_name, notifMessage, DateTime.now(), DateTime.now());
                 databaseManager().deleteListingReq(widget.listID);

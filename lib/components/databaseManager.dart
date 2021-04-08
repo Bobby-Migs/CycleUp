@@ -24,6 +24,9 @@ class databaseManager {
   FirebaseFirestore.instance.collection('displayedBikes');
   final CollectionReference runningRentals =
   FirebaseFirestore.instance.collection('runningRentals');
+  final CollectionReference comments =
+  FirebaseFirestore.instance.collection('comments');
+
   String getOwnerName;
 
 
@@ -53,9 +56,9 @@ class databaseManager {
   }
   // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< PUSHING DATA TO BikeCollections LIST >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   Future<void> pushBikeCollections(
-      String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features) async {
-    return await bikeCollections.doc()
-        .set({'userName': userName, 'userEmail':userEmail, 'picture': _image, 'bikeName': bikeName, 'price': price, 'frameset': frameset, 'fork': fork, 'cranks': cranks, 'features':features})
+      String userName, String userEmail, String _image, String bikeName, int price, String frameset, String fork, String cranks, String features, bikeID, ) async {
+    return await bikeCollections.doc(bikeID)
+        .set({'userName': userName, 'userEmail':userEmail, 'picture': _image, 'bikeName': bikeName, 'price': price, 'frameset': frameset, 'fork': fork, 'cranks': cranks, 'features':features, 'bikeID': bikeID, })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add product: $error"));
   }
@@ -88,6 +91,13 @@ class databaseManager {
         .set({'picture': _image, 'ownerName':ownerName, 'borrowerName': userName, 'userEmail':userEmail,'contactNum': contNum, 'address': address, 'bikeName': bikeName, 'price': price, 'selectedDate': selectedDated, 'days': days, 'type': type, 'borrowerDocID':ID})
         .then((value) => print('item is rented'))
         .catchError((error) => print("Failed to add to rentals: $error"));
+  }
+
+  Future<void> pushTOComments(String messageID, String message, String userName) async {
+    return await comments.doc()
+        .set({'messageID': messageID, 'message':message, 'userName': userName})
+        .then((value) => print('comment is added'))
+        .catchError((error) => print("Failed to add comments: $error"));
   }
 
 
@@ -281,4 +291,43 @@ Future deleteBorrowReq(String ID)async {
     print('item deleted from Rental Lists Request');
   });
 }
+
+  Future deleteBike(String ID)async {
+    print(ID);
+    String documentID;
+    bikeCollections
+        .doc(ID.toString())
+        .delete()
+        .then((_) {
+      print('item deleted from admin bike collections');
+    });
+  }
+  Future deleteRental(String ID)async {
+    print(ID);
+    String documentID;
+    runningRentals
+        .doc(ID.toString())
+        .delete()
+        .then((_) {
+      print('item deleted from admin bike rental');
+    });
+  }
+  //<<<<<<<<<<<<<<<<<<<< GET MESSAGE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  Future getMessage() async {
+    List itemList =[];
+
+    try{
+      await comments.where('messageID', isEqualTo: 'k6rP2nBVMOss5TXcGbcJ').get().then((QuerySnapshot querySnapshot) => {
+        querySnapshot.docs.forEach((element) {
+          itemList.add(element.data());
+          print(element["message"]);
+        }),
+      });
+      return itemList;
+    }catch (e){
+      print(e.toString());
+      return null;
+    }
+  }
+
 }

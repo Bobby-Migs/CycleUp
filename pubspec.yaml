@@ -37,9 +37,10 @@ dependencies:
   mailer: 3.3.0
   simple_animations: 2.5.1
   get: ^3.26.0
-  #stream_chat_flutter: ^0.2.20+3
+  google_maps_flutter: ^1.1.1
+  location: ^3.0.0
+  flutter_launcher_icons: ^0.8.1
 
-#  google_maps_flutter: ^1.2.0
   # state management
   provider: ^4.3.2+2
 
@@ -53,6 +54,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons:
+  path: ../
+
+flutter_icons:
+  image_path_android: "assets/images/cycleupLogo.png"
+  image_path_ios: "assets/images/cycleupLogo.png"
+  android: true
+  ios: true
+  adaptive_icon_background: "assets/images/cycleupLogo.png"
+  adaptive_icon_foreground: "assets/images/cycleupLogo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

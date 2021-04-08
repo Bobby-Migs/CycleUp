@@ -53,6 +53,7 @@ class _ProductsState extends State<Products> {
             prod_features: userProductList[index]['features'],
             user_Name: userProductList[index]['userName'],
             ownerEmail: userProductList[index]['userEmail'],
+            bikeColID: userProductList[index]['bikeID'],
 
           );
         });
@@ -71,6 +72,7 @@ class Single_prod extends StatelessWidget {
   final prod_features;
   final user_Name;
   final ownerEmail;
+  final bikeColID;
 
   Single_prod(
       {this.prod_name,
@@ -83,6 +85,7 @@ class Single_prod extends StatelessWidget {
         this.prod_features,
         this.user_Name,
         this.ownerEmail,
+        this.bikeColID
       });
 
   @override
@@ -104,8 +107,7 @@ class Single_prod extends StatelessWidget {
                   prod_detail_features: prod_features,
                   user_Name: user_Name,
                   ownerEmail: ownerEmail,
-
-
+                  bikeColID:bikeColID,
 
                 ),
               )),

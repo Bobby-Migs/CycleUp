@@ -48,7 +48,7 @@ class _DisplayedBikesState extends State<DisplayedBikes> {
           //GRID VIEW
           Container(
             //width: MediaQuery.of(context).size.width /2,
-            height: 525.0,
+            height: 538.0,
             child: Column(
               children: [
                 Container(
@@ -80,7 +80,7 @@ class _DisplayedBikesState extends State<DisplayedBikes> {
                     ],
                   ),
                 ),
-                PushToDisplayedBikes()
+                Expanded(child: PushToDisplayedBikes())
               ],
             ),
           )

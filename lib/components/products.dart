@@ -22,7 +22,6 @@ class _ProductsState extends State<Products> {
 
   fetchDatabaseList() async {
     dynamic resultant = await databaseManager().getBikeCollections();
-
     if(resultant == null){
       print('Unable to retrieve');
     }else {
@@ -31,7 +30,6 @@ class _ProductsState extends State<Products> {
       });
     }
   }
-
 
   get index => null;
 
@@ -52,7 +50,7 @@ class _ProductsState extends State<Products> {
             prod_fork: userProductList[index]['fork'],
             prod_features: userProductList[index]['features'],
             user_Name: userProductList[index]['userName'],
-
+            bikeColID: userProductList[index]['bikeID'],
           );
         });
   }
@@ -69,6 +67,7 @@ class Single_prod extends StatelessWidget {
   final prod_fork;
   final prod_features;
   final user_Name;
+  final bikeColID;
 
   Single_prod(
       {this.prod_name,
@@ -80,6 +79,7 @@ class Single_prod extends StatelessWidget {
       this.prod_fork,
       this.prod_features,
       this.user_Name,
+      this.bikeColID,
       });
 
   @override
@@ -100,6 +100,8 @@ class Single_prod extends StatelessWidget {
                     prod_detail_fork: prod_fork,
                     prod_detail_features: prod_features,
                     user_Name: user_Name,
+                    bikeColID:bikeColID,
+
 
                   ),
               )),

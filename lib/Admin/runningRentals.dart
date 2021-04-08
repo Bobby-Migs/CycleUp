@@ -49,7 +49,7 @@ class _runningRentalsState extends State<runningRentals> {
           //GRID VIEW
           Container(
             //width: MediaQuery.of(context).size.width /2,
-            height: 525.0,
+            height: 538.0,
             child: Column(
               children: [
                 Container(
@@ -82,7 +82,7 @@ class _runningRentalsState extends State<runningRentals> {
                   ),
 
                 ),
-                DisplayRunningRentals()
+                Expanded(child: DisplayRunningRentals())
               ],
             ),
           )
